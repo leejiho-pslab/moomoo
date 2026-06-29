@@ -294,14 +294,41 @@ const profilePhoto = img(profileSrc) ?? `${import.meta.env.BASE_URL}images/deale
     .cred { padding: 9px 13px; font-size: 0.84rem; }
   }
   @media (max-width: 540px) {
-    .services { grid-template-columns: 1fr; }
-    .process { grid-template-columns: 1fr; }
-    .stats { grid-template-columns: 1fr; gap: 18px; }
-    .stat { flex-direction: row; align-items: baseline; gap: 14px; }
+    /* 모바일 스크롤 단축 — 블록 간격·여백 축소 */
+    .about { gap: 44px; }
+    .about__block { padding-top: 36px; }
+    .about__blockhead { margin-bottom: 22px; }
+
+    /* 프로필 사진 + 자격 뱃지(2열) */
     .about__aside { grid-template-columns: 1fr; }
-    .about__photo { max-width: 240px; }
-    .tl { grid-template-columns: 1fr; gap: 2px; }
-    .tl__period { grid-column: 1; }
-    .tl__main { grid-column: 1; }
+    .about__photo { max-width: 220px; }
+    .creds { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .cred { padding: 9px 11px; font-size: 0.8rem; }
+
+    /* 스탯 */
+    .stats { grid-template-columns: 1fr; gap: 14px; margin-top: 28px; }
+    .stat { flex-direction: row; align-items: baseline; gap: 14px; }
+
+    /* 경력 타임라인 */
+    .tl { grid-template-columns: 1fr; gap: 2px; padding-bottom: 20px; }
+    .tl__period, .tl__main { grid-column: 1; }
+
+    /* 수상·실적 2열 압축 */
+    .awards { padding: 18px; }
+    .awards__list { grid-template-columns: repeat(2, 1fr); gap: 9px 12px; }
+    .award { font-size: 0.84rem; gap: 9px; }
+
+    /* 전문 분야 2열 압축 */
+    .services { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .service { padding: 16px 14px; }
+    .service__mark { width: 28px; height: 28px; margin-bottom: 10px; font-size: 0.9rem; }
+    .service__name { font-size: 0.98rem; }
+    .service__desc { font-size: 0.8rem; margin-top: 7px; line-height: 1.55; }
+
+    /* 프로세스 2열 압축 */
+    .process { grid-template-columns: repeat(2, 1fr); gap: 18px 14px; }
+    .step__no { font-size: 1.4rem; margin-bottom: 7px; }
+    .step__title { font-size: 1rem; }
+    .step__desc { font-size: 0.82rem; }
   }
 </style>
