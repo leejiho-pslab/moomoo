@@ -36,6 +36,12 @@ export interface SiteConfig {
     title: string;
     body: string;
     stats: { value: string; label: string }[];
+    /** 프로필 자격·전문 뱃지 */
+    credentials: string[];
+    /** 전문 분야 / 제공 서비스 */
+    services: { name: string; desc: string }[];
+    /** 상담~출고 프로세스 */
+    process: { no: string; title: string; desc: string }[];
   };
   models: {
     title: string;
@@ -99,6 +105,27 @@ export const site: SiteConfig = {
       { value: 'Hyundai', label: '현대자동차 정식 카마스터' },
       { value: 'Genesis', label: '제네시스 상담 가능' },
       { value: '대전', label: '대전선화대리점' },
+    ],
+    credentials: [
+      '현대자동차 정식 카마스터',
+      '제네시스 상담 가능',
+      '신차 · 법인 · 리스 · 장기렌트',
+      '대전 · 세종 · 충청 권역',
+    ],
+    services: [
+      { name: '신차 구매 상담', desc: '차종 비교부터 옵션·색상까지 1:1 맞춤 제안으로 가장 잘 맞는 한 대를 찾아드립니다.' },
+      { name: '금융 설계', desc: '할부·리스·장기렌트 조건을 비교해 월 납입과 총비용까지 최적 플랜을 설계합니다.' },
+      { name: '법인 구매', desc: '법인 명의 구매와 세무·회계 처리까지 매끄럽게 진행해 드립니다.' },
+      { name: '보상판매 · 매입', desc: '타시던 차의 시세를 정확히 산정해 보상판매·매입으로 부담을 줄여드립니다.' },
+      { name: '출고 · 등록 대행', desc: '번호판·등록·탁송까지 번거로운 절차를 책임지고 대신 처리합니다.' },
+      { name: '출고 후 케어', desc: '정기 점검·보증·리콜 안내 등 계약 이후에도 변함없이 관리합니다.' },
+    ],
+    process: [
+      { no: '01', title: '문의 · 상담', desc: '전화 · 문자 · 카카오톡으로 편하게 시작하세요.' },
+      { no: '02', title: '맞춤 견적', desc: '예산과 용도에 맞춘 최적의 견적을 제안합니다.' },
+      { no: '03', title: '계약', desc: '투명한 조건으로 안심하고 계약을 진행합니다.' },
+      { no: '04', title: '출고', desc: '등록 · 탁송까지 책임지고 마무리합니다.' },
+      { no: '05', title: '사후관리', desc: '출고 이후에도 변함없는 케어를 약속합니다.' },
     ],
   },
   models: {
