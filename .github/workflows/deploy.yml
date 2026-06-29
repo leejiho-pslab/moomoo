@@ -1,0 +1,51 @@
+name: deploy
+on:
+  schedule:
+    - cron: '0 21 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: moomoo
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: moomoo/package-lock.json
+      - run: npm ci
+      - run: npm test
+      - name: Fetch content + images
+        env:
+          YT_CHANNEL_URL: https://www.youtube.com/@hyundai_moomoo
+        run: |
+          npm run fetch:content
+          npm run fetch:images
+      - name: Build
+        env:
+          SITE_BASE: /moomoo/
+        run: npm run build
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: moomoo/dist
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.d.outputs.page_url }}
+    steps:
+      - id: d
+        uses: actions/deploy-pages@v4
