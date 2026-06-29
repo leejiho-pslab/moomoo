@@ -1,0 +1,21 @@
+{
+  "name": "hyundai-dealer-homepage",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "description": "현대자동차 딜러 원페이지 홈페이지 — Astro 정적 사이트 (포트폴리오·차종소개·유튜브·인스타 자동 업데이트)",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "fetch:content": "node scripts/fetch-content.mjs",
+    "fetch:images": "node scripts/fetch-images.mjs",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "astro": "^5.5.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

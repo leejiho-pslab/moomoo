@@ -1,0 +1,42 @@
+---
+import { site } from '../data/site.config';
+import feed from '../data/feed.json';
+const year = new Date().getFullYear();
+const updated = feed.updatedAt ? new Date(feed.updatedAt).toLocaleDateString('ko-KR') : null;
+---
+
+<footer class="footer">
+  <div class="container footer__inner">
+    <div class="footer__brand">
+      <span class="footer__mark">{site.brand.logoText}</span>
+      <p>{site.brand.name} · {site.brand.slogan}</p>
+    </div>
+    <div class="footer__links">
+      <a href={site.youtube.channelUrl} target="_blank" rel="noopener">YouTube</a>
+      <a href={site.instagram.profileUrl} target="_blank" rel="noopener">Instagram</a>
+      <a href="https://www.hyundai.com/kr/ko/e" target="_blank" rel="noopener">현대자동차</a>
+    </div>
+  </div>
+  <div class="container footer__legal">
+    <span>© {year} {site.brand.name}. 본 사이트는 공식 현대자동차 사이트가 아닌 딜러 운영 페이지입니다.</span>
+    {updated && <span>콘텐츠 업데이트: {updated}</span>}
+  </div>
+</footer>
+
+<style>
+  .footer { background: #050608; color: #fff; padding-block: clamp(48px, 7vw, 72px) 28px; }
+  .footer__inner {
+    display: flex; flex-wrap: wrap; gap: 24px;
+    justify-content: space-between; align-items: center;
+    padding-bottom: 28px; border-bottom: 1px solid var(--line-dark);
+  }
+  .footer__mark { font-weight: 800; letter-spacing: 0.14em; font-size: 1.2rem; }
+  .footer__brand p { margin: 8px 0 0; color: var(--muted-dark); font-size: 0.92rem; }
+  .footer__links { display: flex; gap: 24px; }
+  .footer__links a { color: rgba(255,255,255,0.8); font-size: 0.92rem; }
+  .footer__links a:hover { color: var(--accent); }
+  .footer__legal {
+    display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between;
+    margin-top: 22px; color: var(--muted); font-size: 0.8rem;
+  }
+</style>
