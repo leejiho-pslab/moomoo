@@ -38,6 +38,10 @@ export interface SiteConfig {
     stats: { value: string; label: string }[];
     /** 프로필 자격·전문 뱃지 */
     credentials: string[];
+    /** 경력 타임라인 (브랜드별) */
+    career: { period: string; brand: string; role: string; note?: string }[];
+    /** 수상·실적 */
+    awards: string[];
     /** 전문 분야 / 제공 서비스 */
     services: { name: string; desc: string }[];
     /** 상담~출고 프로세스 */
@@ -100,17 +104,32 @@ export const site: SiteConfig = {
   },
   about: {
     title: '한 대의 차가 아닌,\n오래갈 신뢰를 팝니다',
-    body: '현대자동차 대전선화대리점 카마스터 김무겸입니다. 무리한 권유 대신 가장 잘 맞는 선택을, 계약 이후에도 변함없는 케어를 약속합니다.',
+    body: '2015년 첫 영업을 시작한 이래 폭스바겐 · 재규어 랜드로버 · 르노 · BMW를 거치며 10년 넘게 자동차 한 길을 걸어왔습니다. 대전 판매왕 · 전국 TOP10의 현장 경험을 바탕으로, 무리한 권유 대신 고객에게 가장 잘 맞는 한 대를 제안하고 계약 이후에도 변함없이 함께합니다.',
     stats: [
-      { value: 'Hyundai', label: '현대자동차 정식 카마스터' },
-      { value: 'Genesis', label: '제네시스 상담 가능' },
-      { value: '대전', label: '대전선화대리점' },
+      { value: '10년+', label: '자동차 영업 경력' },
+      { value: '100대+', label: '연간 판매 실적' },
+      { value: 'TOP 10', label: '전국 판매 다수 수상' },
     ],
     credentials: [
       '현대자동차 정식 카마스터',
       '제네시스 상담 가능',
       '신차 · 법인 · 리스 · 장기렌트',
       '대전 · 세종 · 충청 권역',
+    ],
+    career: [
+      { period: '2025 – 현재', brand: '현대자동차 대전선화대리점', role: '카마스터', note: '신차 · 법인 · 리스 전문' },
+      { period: '2023 – 2024', brand: 'BMW 청주', role: '세일즈 매니저', note: '지점 판매 1위' },
+      { period: '2017 – 2021', brand: '르노삼성 유성', role: '영업 팀장', note: '대전 판매왕 · 전국 TOP10' },
+      { period: '2016', brand: '재규어 랜드로버', role: '영업 주임' },
+      { period: '2015 – 2016', brand: '폭스바겐 대전', role: '영업 대리', note: '최연소 대리 진급' },
+    ],
+    awards: [
+      '전국 판매 TOP 10 다수',
+      '대전 판매왕',
+      '충청 권역 TOP 10',
+      'BMW 지점 판매 1위',
+      '최연소 대리 진급',
+      '연간 100대+ 꾸준한 판매',
     ],
     services: [
       { name: '신차 구매 상담', desc: '차종 비교부터 옵션·색상까지 1:1 맞춤 제안으로 가장 잘 맞는 한 대를 찾아드립니다.' },
