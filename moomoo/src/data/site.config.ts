@@ -199,6 +199,7 @@ export const site: SiteConfig = {
         tagline: '도심형 SUV의 표준',
         segment: 'SUV',
         href: 'https://www.hyundai.com/kr/ko/e',
+        image: 'https://commons.wikimedia.org/wiki/Special:FilePath/23%20Hyundai%20Tucson%20%28NX4%2C%20LWB%29%20fl%201.jpg?width=1024',
       },
       {
         id: 'kona',
@@ -206,6 +207,7 @@ export const site: SiteConfig = {
         tagline: '경쾌한 컴팩트 SUV',
         segment: 'SUV',
         href: 'https://www.hyundai.com/kr/ko/e',
+        image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Hyundai%20Kona%20SX2%201.6%20Premium%20Hybrid%20Atlas%20White.jpg?width=1024',
       },
       {
         id: 'staria',
@@ -213,6 +215,7 @@ export const site: SiteConfig = {
         tagline: '공간의 품격, 패밀리 RV',
         segment: 'RV',
         href: 'https://www.hyundai.com/kr/ko/e',
+        image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Hyundai%20Staria%20Lounge%20US4%20Creamy%20White%20%28front%29.jpg?width=1024',
       },
       {
         id: 'ioniq6',
@@ -220,6 +223,7 @@ export const site: SiteConfig = {
         tagline: '전기 세단의 새 기준',
         segment: 'EV',
         href: 'https://www.hyundai.com/kr/ko/e',
+        image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Hyundai%20IONIQ%206%20CE%20Serenity%20White%20Pearl%20%281%29.jpg?width=1024',
       },
       {
         id: 'casper',
@@ -227,6 +231,7 @@ export const site: SiteConfig = {
         tagline: '작지만 단단한 엔트리 SUV',
         segment: 'SUV',
         href: 'https://www.hyundai.com/kr/ko/e',
+        image: 'https://commons.wikimedia.org/wiki/Special:FilePath/00%20Hyundai%20Casper%20%28cropped%29.jpg?width=1024',
       },
       {
         id: 'venue',
@@ -234,6 +239,7 @@ export const site: SiteConfig = {
         tagline: '나만의 첫 SUV',
         segment: 'SUV',
         href: 'https://www.hyundai.com/kr/ko/e',
+        image: 'https://commons.wikimedia.org/wiki/Special:FilePath/2022%20Hyundai%20Venue%20Preferred%20in%20Polar%20White%2C%20Front%20Left.jpg?width=1024',
       },
     ],
   },
