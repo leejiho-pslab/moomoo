@@ -32,15 +32,21 @@ const modelPhotos: Record<string, string | null> = images.models ?? {};
             class="model__media"
             data-variant={String(i % 4)}
             data-photo={photo ? 'true' : undefined}
-            style={photo ? `background-image:url('${photo}')` : undefined}
           >
-            {!photo && (
+            <img
+              class="model__car"
+              src={carSilhouette}
+              alt=""
+              aria-hidden="true"
+              loading="lazy"
+            />
+            {photo && (
               <img
-                class="model__car"
-                src={carSilhouette}
-                alt=""
-                aria-hidden="true"
+                class="model__photo"
+                src={photo}
+                alt={m.name}
                 loading="lazy"
+                onerror="this.remove()"
               />
             )}
             <span class="model__segment">{m.segment}</span>
@@ -93,14 +99,18 @@ const modelPhotos: Record<string, string | null> = images.models ?? {};
     position: absolute; inset: 0;
     background: radial-gradient(120% 80% at 80% 0%, rgba(255,255,255,0.18), transparent 60%);
   }
-  /* 실제 차량 사진은 잘리지 않게 전체 표시(contain) + 밝은 배경 */
-  .model__media[data-photo] {
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center 58%;
-    background-color: #eef1f5;
-  }
+  /* 실제 차량 사진: 밝은 배경 위에 잘리지 않게 전체 표시(contain).
+     사진 로드 실패 시 onerror 로 제거되어 뒤의 실루엣이 노출된다. */
+  .model__media[data-photo] { background-color: #eef1f5; }
   .model__media[data-photo]::after { display: none; }
+  .model__photo {
+    position: absolute; inset: 0; z-index: 0;
+    width: 100%; height: 100%;
+    object-fit: contain; object-position: center 56%;
+    background: #eef1f5;
+    transition: transform 0.5s var(--ease);
+  }
+  .model:hover .model__photo { transform: scale(1.04); }
   .model__car {
     position: absolute;
     left: 50%; top: 56%;
