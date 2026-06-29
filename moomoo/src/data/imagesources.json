@@ -1,5 +1,5 @@
 {
-  "__usage": "hyundai.com 공식 이미지 URL(또는 차종 인트로 페이지 URL)을 채우면 빌드 시 자동 다운로드되어 사이트에 자체 호스팅됩니다. 페이지 URL이면 대표 이미지(og:image)를 자동 추출합니다. 비우면 일러스트로 폴백됩니다. models 키는 site.config.ts 의 각 차종 id 와 일치합니다.",
+  "__usage": "hyundai.com 공식 이미지 URL(또는 차종 인트로 페이지 URL)을 채우면 빌드 시 자동 다운로드되어 사이트에 자체 호스팅됩니다. 페이지 URL이면 대표 이미지(og:image)를 자동 추출합니다. 값에 URL 배열을 넣으면 앞에서부터 시도해 처음 성공한 이미지를 사용합니다(현대닷컴 실패 시 폴백 보장). 비우면 일러스트로 폴백됩니다. models 키는 site.config.ts 의 각 차종 id 와 일치합니다.",
   "hero": "",
   "profile": "",
   "models": {
@@ -9,11 +9,29 @@
     "ioniq5": "https://www.hyundai.com/kr/ko/e/vehicles/ioniq5/intro",
     "palisade": "https://www.hyundai.com/kr/ko/e/vehicles/the-all-new-palisade/intro",
     "sonata": "https://www.hyundai.com/kr/ko/e/vehicles/sonata-the-edge/intro",
-    "tucson": "https://www.hyundai.com/kr/ko/e/vehicles/tucson/intro",
-    "kona": "https://www.hyundai.com/kr/ko/e/vehicles/kona/intro",
-    "staria": "https://www.hyundai.com/kr/ko/e/vehicles/staria/intro",
-    "ioniq6": "https://www.hyundai.com/kr/ko/e/vehicles/ioniq6/intro",
-    "casper": "https://www.hyundai.com/kr/ko/e/vehicles/casper/intro",
-    "venue": "https://www.hyundai.com/kr/ko/e/vehicles/venue/intro"
+    "tucson": [
+      "https://www.hyundai.com/kr/ko/e/vehicles/tucson/intro",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/23%20Hyundai%20Tucson%20%28NX4%2C%20LWB%29%20fl%201.jpg?width=1280"
+    ],
+    "kona": [
+      "https://www.hyundai.com/kr/ko/e/vehicles/kona/intro",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Hyundai%20Kona%20SX2%201.6%20Premium%20Hybrid%20Atlas%20White.jpg?width=1280"
+    ],
+    "staria": [
+      "https://www.hyundai.com/kr/ko/e/vehicles/staria/intro",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Hyundai%20Staria%20Lounge%20US4%20Creamy%20White%20%28front%29.jpg?width=1280"
+    ],
+    "ioniq6": [
+      "https://www.hyundai.com/kr/ko/e/vehicles/the-new-ioniq6/intro",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Hyundai%20IONIQ%206%20CE%20Serenity%20White%20Pearl%20%281%29.jpg?width=1280"
+    ],
+    "casper": [
+      "https://casper.hyundai.com/vehicles/electric/highlight",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/00%20Hyundai%20Casper%20%28cropped%29.jpg?width=1280"
+    ],
+    "venue": [
+      "https://www.hyundai.com/kr/ko/e/vehicles/venue/intro",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/2022%20Hyundai%20Venue%20Preferred%20in%20Polar%20White%2C%20Front%20Left.jpg?width=1280"
+    ]
   }
 }
