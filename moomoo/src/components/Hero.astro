@@ -51,7 +51,7 @@ const subtitleLines = subtitle.split('\n');
       </div>
     </div>
 
-    <figure class="hero__dealer" data-reveal data-reveal-delay="2">
+    <figure class="hero__dealer" data-photo={hasDealerPhoto ? 'true' : undefined} data-reveal data-reveal-delay="2">
       <img src={dealerPhoto} alt="담당 딜러" />
       {!hasDealerPhoto && (
         <figcaption>
@@ -150,6 +150,13 @@ const subtitleLines = subtitle.split('\n');
   }
   .hero__dealer img {
     width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block;
+  }
+  /* 실제 업로드 사진(명함 등)은 잘리지 않게 원본 비율 그대로 전체 표시 */
+  .hero__dealer[data-photo] {
+    background: #fff;
+  }
+  .hero__dealer[data-photo] img {
+    aspect-ratio: auto; object-fit: contain; height: auto;
   }
   .hero__dealer figcaption {
     position: absolute; inset: auto 0 0 0;
