@@ -1,0 +1,97 @@
+---
+import { site } from '../data/site.config';
+import feed from '../data/feed.json';
+
+const { title, description, channelUrl } = site.youtube;
+const videos = (feed.youtube ?? []).slice(0, 6);
+---
+
+<section class="section section--dark" id="youtube">
+  <div class="container">
+    <div class="section__head section__head--row">
+      <div>
+        <p class="eyebrow" data-reveal>YOUTUBE</p>
+        <h2 class="headline" data-reveal data-reveal-delay="1">{title}</h2>
+        <p class="lead" data-reveal data-reveal-delay="2">{description}</p>
+      </div>
+      <a class="btn btn--ghost yt__channel" href={channelUrl} target="_blank" rel="noopener" data-reveal>
+        채널 바로가기
+      </a>
+    </div>
+
+    {videos.length > 0 ? (
+      <div class="yt-grid">
+        {videos.map((v, i) => (
+          <a class="yt-card" href={v.url} target="_blank" rel="noopener" data-reveal data-reveal-delay={String((i % 3) + 1)}>
+            <div class="yt-card__thumb" style={v.thumbnail ? `background-image:url('${v.thumbnail}')` : undefined}>
+              <span class="yt-card__play" aria-hidden="true">▶</span>
+            </div>
+            <h3 class="yt-card__title">{v.title}</h3>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <a class="feed-empty" href={channelUrl} target="_blank" rel="noopener" data-reveal>
+        <span class="feed-empty__icon" aria-hidden="true">▶</span>
+        <span>
+          <strong>최신 영상은 채널에서 만나보세요</strong>
+          <em>빌드 시 유튜브 최신 영상이 이곳에 자동으로 채워집니다.</em>
+        </span>
+      </a>
+    )}
+  </div>
+</section>
+
+<style>
+  .section__head--row {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    gap: 24px; max-width: none;
+  }
+  .yt__channel { flex: none; }
+
+  .yt-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: clamp(16px, 2.4vw, 28px);
+  }
+  .yt-card { display: flex; flex-direction: column; gap: 14px; }
+  .yt-card__thumb {
+    position: relative; aspect-ratio: 16 / 9; border-radius: 14px; overflow: hidden;
+    background: #14161c center / cover no-repeat;
+    background-image: linear-gradient(135deg, #14161c, #2a3340);
+    display: grid; place-items: center;
+    transition: transform 0.4s var(--ease);
+  }
+  .yt-card:hover .yt-card__thumb { transform: translateY(-4px); }
+  .yt-card__thumb::after { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.12); }
+  .yt-card__play {
+    position: relative; z-index: 1;
+    width: 56px; height: 56px; border-radius: 50%;
+    display: grid; place-items: center; color: #fff;
+    background: rgba(0, 170, 210, 0.92);
+    box-shadow: 0 10px 30px -8px rgba(0, 170, 210, 0.6);
+  }
+  .yt-card__title {
+    font-size: 1rem; font-weight: 600; color: rgba(255,255,255,0.9);
+    line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical; overflow: hidden;
+  }
+
+  .feed-empty {
+    display: flex; align-items: center; gap: 20px;
+    padding: clamp(24px, 4vw, 40px);
+    border: 1px dashed var(--line-dark); border-radius: var(--radius);
+    color: #fff;
+  }
+  .feed-empty__icon {
+    width: 56px; height: 56px; flex: none; border-radius: 50%;
+    display: grid; place-items: center; background: rgba(0,170,210,0.9);
+  }
+  .feed-empty strong { display: block; font-size: 1.1rem; }
+  .feed-empty em { display: block; font-style: normal; color: var(--muted-dark); margin-top: 4px; font-size: 0.92rem; }
+
+  @media (max-width: 880px) {
+    .section__head--row { flex-direction: column; align-items: flex-start; gap: 16px; }
+    .yt-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .yt-card__title { font-size: 0.86rem; }
+  }
+</style>

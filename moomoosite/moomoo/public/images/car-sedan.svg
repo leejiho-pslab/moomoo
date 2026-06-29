@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-label="프리미엄 세단 일러스트">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0c1220"/>
+      <stop offset="0.55" stop-color="#0a1830"/>
+      <stop offset="1" stop-color="#05080f"/>
+    </linearGradient>
+    <radialGradient id="spot" cx="0.62" cy="0.28" r="0.7">
+      <stop offset="0" stop-color="#0aa6d0" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#0aa6d0" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e9f4fb"/>
+      <stop offset="0.5" stop-color="#9fb6c9"/>
+      <stop offset="1" stop-color="#3f5266"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#16324a"/>
+      <stop offset="1" stop-color="#0b1c2c"/>
+    </linearGradient>
+    <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0aa6d0" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#0aa6d0" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="500" fill="url(#bg)"/>
+  <rect width="800" height="500" fill="url(#spot)"/>
+
+  <!-- floor light -->
+  <ellipse cx="400" cy="380" rx="330" ry="26" fill="url(#floor)"/>
+  <rect x="70" y="378" width="660" height="2" fill="#0aa6d0" opacity="0.6"/>
+
+  <!-- car body -->
+  <g>
+    <!-- main silhouette -->
+    <path d="M120 360
+             C120 330 150 318 190 312
+             C235 270 300 250 380 248
+             C470 246 545 268 600 300
+             C650 305 690 320 700 345
+             C705 360 700 372 690 376
+             L150 376
+             C128 376 120 372 120 360 Z"
+          fill="url(#body)"/>
+    <!-- lower shadow -->
+    <path d="M150 376 L690 376 C700 372 705 360 700 345 C690 360 540 366 400 366 C270 366 175 362 150 350 Z"
+          fill="#1a2735" opacity="0.55"/>
+    <!-- greenhouse / glass -->
+    <path d="M250 286
+             C300 262 350 252 400 252
+             C460 252 520 268 560 296
+             C520 300 470 302 410 302
+             C350 302 300 296 250 286 Z"
+          fill="url(#glass)"/>
+    <!-- pillar -->
+    <path d="M404 252 L410 302 L398 302 L396 252 Z" fill="#0b1c2c" opacity="0.8"/>
+    <!-- belt line accent -->
+    <path d="M196 312 C260 300 540 300 612 320" fill="none" stroke="#dff1fb" stroke-width="2" opacity="0.7"/>
+    <!-- headlight -->
+    <path d="M676 332 C690 332 700 340 700 348 L672 346 C672 338 670 332 676 332 Z" fill="#bfefff"/>
+    <circle cx="690" cy="344" r="7" fill="#eafdff"/>
+    <!-- taillight -->
+    <rect x="122" y="336" width="16" height="10" rx="3" fill="#ff5a5f" opacity="0.9"/>
+  </g>
+
+  <!-- wheels -->
+  <g>
+    <circle cx="248" cy="378" r="46" fill="#0a0f17"/>
+    <circle cx="248" cy="378" r="46" fill="none" stroke="#2a3a4c" stroke-width="3"/>
+    <circle cx="248" cy="378" r="24" fill="#16222f"/>
+    <circle cx="248" cy="378" r="24" fill="none" stroke="#9fb6c9" stroke-width="2"/>
+    <g stroke="#9fb6c9" stroke-width="3" opacity="0.85">
+      <line x1="248" y1="356" x2="248" y2="400"/>
+      <line x1="226" y1="378" x2="270" y2="378"/>
+      <line x1="232" y1="362" x2="264" y2="394"/>
+      <line x1="232" y1="394" x2="264" y2="362"/>
+    </g>
+    <circle cx="552" cy="378" r="46" fill="#0a0f17"/>
+    <circle cx="552" cy="378" r="46" fill="none" stroke="#2a3a4c" stroke-width="3"/>
+    <circle cx="552" cy="378" r="24" fill="#16222f"/>
+    <circle cx="552" cy="378" r="24" fill="none" stroke="#9fb6c9" stroke-width="2"/>
+    <g stroke="#9fb6c9" stroke-width="3" opacity="0.85">
+      <line x1="552" y1="356" x2="552" y2="400"/>
+      <line x1="530" y1="378" x2="574" y2="378"/>
+      <line x1="536" y1="362" x2="568" y2="394"/>
+      <line x1="536" y1="394" x2="568" y2="362"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,196 @@
+---
+import { site } from '../data/site.config';
+import images from '../data/images.json';
+import { img } from '../lib/img';
+import { localImage } from '../lib/localImage';
+const { eyebrow, title, subtitle, backgroundImage } = site.hero;
+// 합성 히어로: 차량 이미지(배경) + 딜러 사진(전면 포트레이트)
+const heroCar = img(images.hero ?? localImage('hero') ?? backgroundImage ?? images.models?.grandeur);
+const dealerSrc = images.profile ?? localImage('profile');
+const hasDealerPhoto = Boolean(img(dealerSrc));
+const dealerPhoto = img(dealerSrc) ?? `${import.meta.env.BASE_URL}images/dealer-profile.svg`;
+const titleLines = title.split('\n');
+const subtitleLines = subtitle.split('\n');
+---
+
+<section class="hero" id="top">
+  <div
+    class="hero__bg"
+    data-photo={heroCar ? 'true' : undefined}
+    style={heroCar ? `background-image:url('${heroCar}')` : undefined}
+  >
+    <div class="hero__grid"></div>
+    <div class="hero__glow"></div>
+  </div>
+
+  {!heroCar && (
+    <img
+      class="hero__car"
+      src={`${import.meta.env.BASE_URL}images/car-silhouette.svg`}
+      alt=""
+      aria-hidden="true"
+    />
+  )}
+
+  <div class="hero__inner container">
+    <div class="hero__copy">
+      <p class="eyebrow" data-reveal>{eyebrow}</p>
+      <h1 class="display hero__title" data-reveal data-reveal-delay="1">
+        {titleLines.map((line, i) => (
+          <>{line}{i < titleLines.length - 1 && <br />}</>
+        ))}
+      </h1>
+      <p class="lead hero__sub" data-reveal data-reveal-delay="2">
+        {subtitleLines.map((line, i) => (
+          <>{line}{i < subtitleLines.length - 1 && <br />}</>
+        ))}
+      </p>
+      <div class="hero__cta" data-reveal data-reveal-delay="3">
+        <a class="btn btn--primary" href="#contact">상담 신청하기</a>
+        <a class="btn btn--ghost" href="#models">차종 둘러보기</a>
+      </div>
+    </div>
+
+    <figure class="hero__dealer" data-reveal data-reveal-delay="2">
+      <img src={dealerPhoto} alt="담당 딜러" />
+      {!hasDealerPhoto && (
+        <figcaption>
+          <strong>{site.dealer.name} <em>{site.dealer.role}</em></strong>
+          <span>{site.dealer.dealership}</span>
+        </figcaption>
+      )}
+    </figure>
+  </div>
+
+  <a class="hero__scroll" href="#about" aria-label="아래로 스크롤">
+    <span></span>
+  </a>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    color: #fff;
+    background: var(--ink);
+    overflow: hidden;
+  }
+  .hero__bg {
+    position: absolute; inset: 0;
+    background-size: cover; background-position: center;
+    background-color: var(--ink);
+  }
+  .hero__bg::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(120% 90% at 78% 8%, rgba(0, 170, 210, 0.28), transparent 55%),
+      radial-gradient(90% 80% at 12% 100%, rgba(0, 44, 95, 0.55), transparent 60%),
+      linear-gradient(180deg, #06070a 0%, #0a0c10 45%, #05070b 100%);
+  }
+  /* 실제 차량 사진 배경일 때 가독성 오버레이 */
+  .hero__bg[data-photo]::before {
+    background:
+      linear-gradient(90deg, rgba(5, 7, 11, 0.85) 0%, rgba(5, 7, 11, 0.5) 52%, rgba(5, 7, 11, 0.22) 100%),
+      linear-gradient(0deg, rgba(5, 7, 11, 0.72), rgba(5, 7, 11, 0.05) 60%);
+  }
+  .hero__grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(120% 100% at 50% 0%, #000 30%, transparent 78%);
+  }
+  .hero__glow {
+    position: absolute;
+    width: 70vw; height: 70vw; max-width: 760px; max-height: 760px;
+    right: -10vw; top: 8%;
+    background: radial-gradient(circle, rgba(0, 170, 210, 0.22), transparent 62%);
+    filter: blur(20px);
+    pointer-events: none;
+  }
+  /* 차량 사진이 없을 때의 실루엣 백드롭 */
+  .hero__car {
+    position: absolute; z-index: 1;
+    left: 50%; bottom: 6%;
+    transform: translateX(-50%);
+    width: min(78%, 880px);
+    opacity: 0.5;
+    filter: drop-shadow(0 30px 60px rgba(0, 170, 210, 0.25));
+    pointer-events: none;
+  }
+
+  .hero__inner {
+    position: relative; z-index: 2;
+    padding-block: 124px 100px;
+    display: grid;
+    grid-template-columns: 1.08fr 0.92fr;
+    gap: clamp(32px, 5vw, 72px);
+    align-items: center;
+    width: 100%;
+  }
+  .hero__title { margin-top: 22px; max-width: 16ch; }
+  .hero__sub { margin-top: 26px; color: rgba(255, 255, 255, 0.72); max-width: 52ch; }
+  .hero__cta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 40px; }
+
+  .hero__dealer {
+    margin: 0;
+    justify-self: end;
+    width: min(100%, 380px);
+    border-radius: 22px;
+    overflow: hidden;
+    position: relative;
+    background: rgba(12, 16, 24, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: 0 40px 80px -30px rgba(0, 170, 210, 0.45);
+    backdrop-filter: blur(4px);
+  }
+  .hero__dealer img {
+    width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block;
+  }
+  .hero__dealer figcaption {
+    position: absolute; inset: auto 0 0 0;
+    padding: 40px 20px 18px;
+    background: linear-gradient(180deg, transparent, rgba(5, 7, 11, 0.88));
+  }
+  .hero__dealer strong { display: block; font-size: 1.2rem; }
+  .hero__dealer strong em {
+    font-style: normal; font-weight: 600; font-size: 0.72rem;
+    letter-spacing: 0.08em; color: var(--accent); margin-left: 8px;
+    vertical-align: middle;
+  }
+  .hero__dealer span { display: block; margin-top: 4px; font-size: 0.85rem; color: rgba(255, 255, 255, 0.72); }
+
+  .hero__scroll {
+    position: absolute; left: 50%; bottom: 30px; transform: translateX(-50%);
+    width: 26px; height: 42px; border: 2px solid rgba(255, 255, 255, 0.4);
+    border-radius: 14px; z-index: 2;
+  }
+  .hero__scroll span {
+    position: absolute; left: 50%; top: 8px; transform: translateX(-50%);
+    width: 4px; height: 8px; border-radius: 2px; background: #fff;
+    animation: scrollcue 1.8s var(--ease) infinite;
+  }
+  @keyframes scrollcue {
+    0% { opacity: 0; transform: translate(-50%, 0); }
+    40% { opacity: 1; }
+    80%, 100% { opacity: 0; transform: translate(-50%, 14px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero__scroll span { animation: none; }
+  }
+
+  @media (max-width: 880px) {
+    .hero__inner {
+      grid-template-columns: 1fr;
+      padding-block: 110px 88px;
+      gap: 40px;
+    }
+    .hero__cta .btn { flex: 1 1 auto; }
+    .hero__dealer { justify-self: start; width: min(72%, 300px); }
+    .hero__car { width: 120%; opacity: 0.32; bottom: 2%; }
+  }
+</style>

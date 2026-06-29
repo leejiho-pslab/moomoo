@@ -1,0 +1,13 @@
+{
+  "__usage": "hyundai.com 공식 이미지 URL(또는 차종 인트로 페이지 URL)을 채우면 빌드 시 자동 다운로드되어 사이트에 자체 호스팅됩니다. 페이지 URL이면 대표 이미지(og:image)를 자동 추출합니다. 비우면 일러스트로 폴백됩니다. models 키는 site.config.ts 의 각 차종 id 와 일치합니다.",
+  "hero": "",
+  "profile": "",
+  "models": {
+    "grandeur": "https://www.hyundai.com/kr/ko/e/vehicles/the-new-grandeur/intro",
+    "santafe": "https://www.hyundai.com/kr/ko/e/vehicles/santafe/intro",
+    "avante": "https://www.hyundai.com/kr/ko/e/vehicles/avante/intro",
+    "ioniq5": "https://www.hyundai.com/kr/ko/e/vehicles/ioniq5/intro",
+    "palisade": "https://www.hyundai.com/kr/ko/e/vehicles/the-all-new-palisade/intro",
+    "sonata": "https://www.hyundai.com/kr/ko/e/vehicles/sonata-the-edge/intro"
+  }
+}

@@ -1,0 +1,94 @@
+---
+import { site } from '../data/site.config';
+import images from '../data/images.json';
+import { img } from '../lib/img';
+import { localImage } from '../lib/localImage';
+const { title, body, stats } = site.about;
+const titleLines = title.split('\n');
+const profileSrc = images.profile ?? localImage('profile');
+const hasProfilePhoto = Boolean(img(profileSrc));
+const profilePhoto = img(profileSrc) ?? `${import.meta.env.BASE_URL}images/dealer-profile.svg`;
+---
+
+<section class="section section--dark" id="about">
+  <div class="container about">
+    <div class="about__intro">
+      <figure class="about__photo" data-reveal>
+        <img src={profilePhoto} alt="딜러 프로필" loading="lazy" />
+        {!hasProfilePhoto && <figcaption>{site.dealer.name} · {site.dealer.role}</figcaption>}
+      </figure>
+
+      <div class="about__head">
+        <p class="eyebrow" data-reveal>ABOUT</p>
+        <h2 class="headline" data-reveal data-reveal-delay="1">
+          {titleLines.map((line, i) => (
+            <>{line}{i < titleLines.length - 1 && <br />}</>
+          ))}
+        </h2>
+        <p class="lead about__body" data-reveal data-reveal-delay="2">{body}</p>
+      </div>
+    </div>
+
+    <ul class="stats">
+      {stats.map((s, i) => (
+        <li class="stat" data-reveal data-reveal-delay={String((i % 3) + 1)}>
+          <span class="stat__value">{s.value}</span>
+          <span class="stat__label">{s.label}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .about { display: grid; gap: clamp(40px, 7vw, 80px); }
+  .about__intro {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: clamp(32px, 6vw, 72px);
+    align-items: center;
+  }
+  .about__photo { margin: 0; position: relative; }
+  .about__photo img {
+    width: 100%;
+    border-radius: var(--radius);
+    border: 1px solid var(--line-dark);
+    box-shadow: 0 30px 60px -30px rgba(0, 170, 210, 0.5);
+  }
+  .about__photo figcaption {
+    position: absolute; left: 16px; bottom: 16px;
+    padding: 6px 14px; border-radius: 999px;
+    background: rgba(0, 0, 0, 0.45); backdrop-filter: blur(6px);
+    border: 1px solid var(--line-dark);
+    font-size: 0.8rem; letter-spacing: 0.04em;
+  }
+  .about__head { max-width: 760px; }
+  .about__body { margin-top: 22px; color: rgba(255, 255, 255, 0.66); }
+
+  @media (max-width: 760px) {
+    .about__intro { grid-template-columns: 1fr; }
+    .about__photo { max-width: 260px; }
+  }
+
+  .stats {
+    list-style: none; margin: 0; padding: 0;
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: clamp(16px, 4vw, 40px);
+    border-top: 1px solid var(--line-dark);
+    padding-top: clamp(32px, 5vw, 56px);
+  }
+  .stat { display: flex; flex-direction: column; gap: 8px; }
+  .stat__value {
+    font-size: clamp(2.2rem, 6vw, 3.6rem); font-weight: 800;
+    letter-spacing: -0.04em;
+    background: linear-gradient(120deg, #fff, var(--accent));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .stat__label { color: var(--muted-dark); font-size: 0.95rem; }
+
+  @media (max-width: 600px) {
+    .stats { grid-template-columns: 1fr; gap: 24px; }
+    .stat { flex-direction: row; align-items: baseline; gap: 16px; }
+    .stat__value { font-size: 2.4rem; }
+  }
+</style>

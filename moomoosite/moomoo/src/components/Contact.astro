@@ -1,0 +1,82 @@
+---
+import { site } from '../data/site.config';
+const { title, description, phone, officeTel, email, kakaoUrl, hours, location } = site.contact;
+const telHref = `tel:${phone.replace(/[^0-9+]/g, '')}`;
+const officeTelHref = `tel:${officeTel.replace(/[^0-9+]/g, '')}`;
+const mailHref = `mailto:${email}`;
+const hasKakao = Boolean(kakaoUrl);
+---
+
+<section class="section section--dark contact" id="contact">
+  <div class="contact__glow"></div>
+  <div class="container contact__inner">
+    <div class="contact__copy">
+      <p class="eyebrow" data-reveal>CONTACT</p>
+      <h2 class="display contact__title" data-reveal data-reveal-delay="1">{title}</h2>
+      <p class="lead contact__desc" data-reveal data-reveal-delay="2">{description}</p>
+
+      <div class="contact__cta" data-reveal data-reveal-delay="3">
+        <a class="btn btn--primary" href={telHref}>📞 전화 상담</a>
+        {hasKakao ? (
+          <a class="btn btn--ghost" href={kakaoUrl} target="_blank" rel="noopener">💬 카카오톡 상담</a>
+        ) : (
+          <a class="btn btn--ghost" href={mailHref}>✉️ 이메일 문의</a>
+        )}
+      </div>
+    </div>
+
+    <ul class="contact__meta" data-reveal data-reveal-delay="2">
+      <li>
+        <span class="contact__label">상담 전화</span>
+        <a class="contact__value" href={telHref}>{phone}</a>
+      </li>
+      <li>
+        <span class="contact__label">대표 전화</span>
+        <a class="contact__value" href={officeTelHref}>{officeTel}</a>
+      </li>
+      <li>
+        <span class="contact__label">이메일</span>
+        <a class="contact__value" href={mailHref}>{email}</a>
+      </li>
+      <li>
+        <span class="contact__label">상담 시간</span>
+        <span class="contact__value">{hours}</span>
+      </li>
+      <li>
+        <span class="contact__label">위치</span>
+        <span class="contact__value">{location}</span>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<style>
+  .contact { overflow: hidden; }
+  .contact__glow {
+    position: absolute; inset: 0; pointer-events: none;
+    background:
+      radial-gradient(70% 60% at 85% 10%, rgba(0, 170, 210, 0.22), transparent 60%),
+      radial-gradient(60% 70% at 10% 100%, rgba(0, 44, 95, 0.5), transparent 60%);
+  }
+  .contact__inner {
+    position: relative; z-index: 1;
+    display: grid; grid-template-columns: 1.3fr 1fr;
+    gap: clamp(40px, 7vw, 90px); align-items: center;
+  }
+  .contact__title { margin-top: 18px; max-width: 14ch; }
+  .contact__desc { margin-top: 22px; color: rgba(255, 255, 255, 0.7); }
+  .contact__cta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 36px; }
+
+  .contact__meta { list-style: none; margin: 0; padding: 0; display: grid; gap: 22px; }
+  .contact__meta li {
+    display: grid; gap: 6px;
+    padding-bottom: 22px; border-bottom: 1px solid var(--line-dark);
+  }
+  .contact__label { font-size: 0.8rem; letter-spacing: 0.12em; color: var(--accent); }
+  .contact__value { font-size: 1.1rem; color: #fff; }
+
+  @media (max-width: 880px) {
+    .contact__inner { grid-template-columns: 1fr; }
+    .contact__cta .btn { flex: 1 1 auto; }
+  }
+</style>
