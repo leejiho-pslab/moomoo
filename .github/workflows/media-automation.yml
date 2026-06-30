@@ -42,6 +42,11 @@ jobs:
 
       - name: Run automation
         env:
+          # OAuth 사용자 위임 (드라이브 저장용 — 권장)
+          GDRIVE_OAUTH_CLIENT_ID: ${{ secrets.GDRIVE_OAUTH_CLIENT_ID }}
+          GDRIVE_OAUTH_CLIENT_SECRET: ${{ secrets.GDRIVE_OAUTH_CLIENT_SECRET }}
+          GDRIVE_OAUTH_REFRESH_TOKEN: ${{ secrets.GDRIVE_OAUTH_REFRESH_TOKEN }}
+          # 서비스 계정 (읽기 폴백)
           GDRIVE_SA_KEY: ${{ secrets.GDRIVE_SA_KEY }}
           GDRIVE_INPUT_FOLDER_ID: ${{ vars.GDRIVE_INPUT_FOLDER_ID }}
           GDRIVE_OUTPUT_FOLDER_ID: ${{ vars.GDRIVE_OUTPUT_FOLDER_ID }}

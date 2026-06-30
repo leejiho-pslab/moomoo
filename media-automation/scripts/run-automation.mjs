@@ -13,7 +13,7 @@ import { dirname, join, basename, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
 import {
-  getDrive, listVideosRecursive, downloadFile, ensureFolder, uploadFile, getFileParent,
+  getReadDrive, getWriteDrive, hasOAuth, listVideosRecursive, downloadFile, ensureFolder, uploadFile,
 } from './drive.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -64,11 +64,21 @@ function run(script, args) {
 }
 
 // --- 메인 -------------------------------------------------------------
-const drive = getDrive();
+const drive = getReadDrive();        // 읽기(원본 조회/다운로드)
+const writeDrive = getWriteDrive();  // 쓰기(완성본 저장)
 
-if (!outputFolderId) {
-  const parent = (await getFileParent(drive, inputFolderId)) || inputFolderId;
-  outputFolderId = await ensureFolder(drive, cfg.outputFolderName, parent);
+// 완성본 드라이브 저장 여부 (delivery=drive 이고 OAuth 위임이 있어야 가능)
+let doUpload = (cfg.delivery || 'drive') !== 'local';
+if (doUpload && !hasOAuth()) {
+  console.warn('⚠️ 드라이브 저장은 OAuth 위임이 필요합니다(서비스 계정은 개인 드라이브 저장 불가 — 구글 제약).');
+  console.warn('   GDRIVE_OAUTH_CLIENT_ID/SECRET/REFRESH_TOKEN 등록 후 다시 실행하세요.');
+  console.warn('   → 이번 실행은 편집까지만 하고 로컬(output/)에 보관합니다.');
+  doUpload = false;
+}
+
+if (doUpload && !outputFolderId) {
+  // OAuth(사용자 위임): 내 드라이브 최상위에 '완성본' 폴더 생성/재사용
+  outputFolderId = await ensureFolder(writeDrive, cfg.outputFolderName, null);
   console.log(`📁 완성본 폴더: ${cfg.outputFolderName} (${outputFolderId})`);
 }
 
@@ -113,18 +123,21 @@ for (const v of fresh) {
       } catch (e) { console.warn('  (썸네일 생략:', e.message, ')'); }
     }
 
-    // 3) 완성본 업로드 (날짜별 하위 폴더)
-    const subName = (v.trail[v.trail.length - 1] || date || 'misc').toString();
-    const sub = await ensureFolder(drive, subName, outputFolderId);
+    // 3) 완성본 업로드 (날짜별 하위 폴더) — 드라이브 저장 모드일 때만
     const uploads = [];
-    for (const plat of ['instagram', 'youtube']) {
-      const f = join(ROOT, 'output', `${v.id}_${plat}.mp4`);
-      if (existsSync(f)) {
-        const up = await uploadFile(drive, f, `${safe}_${plat}.mp4`, sub, 'video/mp4');
-        uploads.push(up.id);
+    if (doUpload) {
+      const subName = (v.trail[v.trail.length - 1] || date || 'misc').toString();
+      const sub = await ensureFolder(writeDrive, subName, outputFolderId);
+      for (const plat of ['instagram', 'youtube']) {
+        const f = join(ROOT, 'output', `${v.id}_${plat}.mp4`);
+        if (existsSync(f)) {
+          const up = await uploadFile(writeDrive, f, `${safe}_${plat}.mp4`, sub, 'video/mp4');
+          uploads.push(up.id);
+        }
       }
     }
-    console.log(`  ⬆️  업로드 완료 (${uploads.length}개) → ${subName}`);
+    if (doUpload) console.log(`  ⬆️  드라이브 완성본 업로드 (${uploads.length}개)`);
+    else console.log('  💾 편집 완료 (로컬 output/ 보관)');
 
     ledger.push({ id: v.id, name: v.name, at: new Date().toISOString(), uploads });
     writeFileSync(LEDGER, JSON.stringify(ledger, null, 2));

@@ -1,9 +1,12 @@
 {
   "$comment": "자동화 설정. 폴더 ID는 환경변수(GitHub Secret/Variable)로도 덮어쓸 수 있다.",
 
-  "inputFolderId": "PUT_INPUT_FOLDER_ID_HERE",
+  "inputFolderId": "1pbuup1Vz4wt_3yOxjZKpGIarjgh-FnVd",
   "outputFolderId": "",
   "outputFolderName": "완성본 (자동생성)",
+
+  "$delivery": "완성본 전달 방식: 'drive'=구글 드라이브 저장(OAuth 위임) / 'local'=로컬(GitHub 산출물)",
+  "delivery": "drive",
 
   "$comment2": "환경변수 우선순위: GDRIVE_INPUT_FOLDER_ID > inputFolderId, GDRIVE_OUTPUT_FOLDER_ID > outputFolderId",
 
