@@ -1,6 +1,6 @@
 {
   "$comment": "썸네일 '고정 틀'. 레퍼런스 4장에서 뽑은 공통 스타일을 토큰으로 박제. 색/크기만 여기서 바꾸면 전체 톤이 한번에 바뀐다.",
-  "fontFamily": "Noto Sans CJK KR, NanumSquare, sans-serif",
+  "fontFamily": "Pretendard, Noto Sans CJK KR, sans-serif",
   "colors": {
     "headline": "#FFFFFF",
     "eyebrow": "#FFFFFF",
