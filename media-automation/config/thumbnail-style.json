@@ -26,19 +26,19 @@
       "scrim": "linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.5) 34%, rgba(0,0,0,0) 62%)"
     },
     "youtube": {
-      "$comment": "유튜브 썸네일 16:9 — 인스타와 다른 레이아웃(좌측 정렬, 가로형)",
-      "width": 1280,
-      "height": 720,
+      "$comment": "유튜브 숏츠 썸네일 9:16 — 인스타와 다른 레이아웃(텍스트 중앙 배치)",
+      "width": 1080,
+      "height": 1920,
       "layout": "left",
-      "padding": 72,
-      "badge": { "top": 56, "left": 64, "fontSize": 30 },
-      "eyebrowSize": 38,
-      "headlineSize": 92,
-      "headlineLineHeight": 1.1,
-      "sublineSize": 32,
-      "sublineLineHeight": 1.4,
-      "maxWidthPct": 66,
-      "scrim": "linear-gradient(to right, rgba(0,0,0,0.86) 0%, rgba(0,0,0,0.52) 46%, rgba(0,0,0,0) 78%)"
+      "padding": 84,
+      "badge": { "top": 96, "left": 84, "fontSize": 42 },
+      "eyebrowSize": 46,
+      "headlineSize": 104,
+      "headlineLineHeight": 1.14,
+      "sublineSize": 40,
+      "sublineLineHeight": 1.42,
+      "maxWidthPct": 96,
+      "scrim": "linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.55) 46%, rgba(0,0,0,0.32) 100%)"
     }
   }
 }

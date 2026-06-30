@@ -1,0 +1,297 @@
+{
+  "weekStart": "2026-07-06",
+  "generatedFor": "차주",
+  "persona": "김무겸",
+  "days": [
+    {
+      "date": "2026-07-06",
+      "kdate": "7월 6일(월)",
+      "posts": {
+        "naver": {
+          "channel": "naver",
+          "queryType": "definition",
+          "queryTypeLabel": "정의형",
+          "title": "그랜저 견적, 무엇부터 봐야 할까 — 조건·종류 총정리 (2026)",
+          "targetKeyword": "대전 그랜저 견적",
+          "model": "그랜저",
+          "intent": "견적",
+          "audience": "사회초년생 첫차",
+          "region": "대전",
+          "outline": [
+            "견적 정의와 기본 개념",
+            "종류·조건 한눈에",
+            "장단점 비교",
+            "자주 묻는 질문(FAQ)",
+            "정리 + 상담 안내"
+          ]
+        },
+        "google": {
+          "channel": "google",
+          "queryType": "review",
+          "queryTypeLabel": "후기형",
+          "title": "[전국 싼타페 출고후기] 패밀리카 할부부터 인도까지 솔직 후기",
+          "targetKeyword": "싼타페 할부",
+          "model": "싼타페",
+          "intent": "할부",
+          "audience": "패밀리카",
+          "region": "전국",
+          "outline": [
+            "고객 상황 배경",
+            "할부 진행 과정(실제 경험)",
+            "출고·인도 경험",
+            "느낀 점·팁",
+            "정리 + 상담 안내"
+          ]
+        }
+      }
+    },
+    {
+      "date": "2026-07-07",
+      "kdate": "7월 7일(화)",
+      "posts": {
+        "naver": {
+          "channel": "naver",
+          "queryType": "howto",
+          "queryTypeLabel": "방법형",
+          "title": "세종 싼타페 할부 똑똑하게 받는 법 — 카마스터가 알려주는 5단계",
+          "targetKeyword": "세종 싼타페 할부",
+          "model": "싼타페",
+          "intent": "할부",
+          "audience": "패밀리카",
+          "region": "세종",
+          "outline": [
+            "시작 전 준비물",
+            "단계별 방법 (1~5)",
+            "놓치면 손해 보는 주의점",
+            "체크리스트",
+            "정리 + 상담 안내"
+          ]
+        },
+        "google": {
+          "channel": "google",
+          "queryType": "guide",
+          "queryTypeLabel": "가이드",
+          "title": "팰리세이드 리스·장기렌트 구매 가이드 — 후회 없는 체크리스트",
+          "targetKeyword": "팰리세이드 리스·장기렌트",
+          "model": "팰리세이드",
+          "intent": "리스·장기렌트",
+          "audience": "법인차",
+          "region": "전국",
+          "outline": [
+            "핵심 요약(300자)",
+            "구매 전 체크포인트",
+            "옵션·색상 선택",
+            "비용·유지비",
+            "정리 + 상담 안내"
+          ]
+        }
+      }
+    },
+    {
+      "date": "2026-07-08",
+      "kdate": "7월 8일(수)",
+      "posts": {
+        "naver": {
+          "channel": "naver",
+          "queryType": "compare",
+          "queryTypeLabel": "비교형",
+          "title": "팰리세이드 vs 코나 비교 — 견적·옵션·유지비 총정리",
+          "targetKeyword": "팰리세이드 코나 비교",
+          "model": "팰리세이드",
+          "intent": "리스·장기렌트",
+          "audience": "법인차",
+          "region": "충청",
+          "outline": [
+            "비교 기준 안내",
+            "항목별 비교표(가격·옵션·유지비)",
+            "상황별 추천 결론",
+            "FAQ",
+            "정리 + 상담 안내"
+          ]
+        },
+        "google": {
+          "channel": "google",
+          "queryType": "news",
+          "queryTypeLabel": "소식형",
+          "title": "투싼 신차·프로모션 소식 — 출고에 미치는 영향",
+          "targetKeyword": "투싼 출고",
+          "model": "투싼",
+          "intent": "출고",
+          "audience": "전기차 입문",
+          "region": "전국",
+          "outline": [
+            "이번 변화 개요",
+            "핵심 포인트",
+            "견적·구매에 미치는 영향",
+            "대상별 추천",
+            "정리 + 상담 안내"
+          ]
+        }
+      }
+    },
+    {
+      "date": "2026-07-09",
+      "kdate": "7월 9일(목)",
+      "posts": {
+        "naver": {
+          "channel": "naver",
+          "queryType": "review",
+          "queryTypeLabel": "후기형",
+          "title": "[전국 투싼 출고후기] 전기차 입문 출고부터 인도까지 솔직 후기",
+          "targetKeyword": "투싼 출고",
+          "model": "투싼",
+          "intent": "출고",
+          "audience": "전기차 입문",
+          "region": "전국",
+          "outline": [
+            "고객 상황 배경",
+            "출고 진행 과정(실제 경험)",
+            "출고·인도 경험",
+            "느낀 점·팁",
+            "정리 + 상담 안내"
+          ]
+        },
+        "google": {
+          "channel": "google",
+          "queryType": "faq",
+          "queryTypeLabel": "FAQ형",
+          "title": "아반떼 시승 자주 묻는 질문 BEST 6 — 카마스터 답변",
+          "targetKeyword": "아반떼 시승",
+          "model": "아반떼",
+          "intent": "시승",
+          "audience": "차량 교체",
+          "region": "전국",
+          "outline": [
+            "Q1~Q6 (고객 언어 질문)",
+            "핵심 요약",
+            "정리 + 상담 안내"
+          ]
+        }
+      }
+    },
+    {
+      "date": "2026-07-10",
+      "kdate": "7월 10일(금)",
+      "posts": {
+        "naver": {
+          "channel": "naver",
+          "queryType": "guide",
+          "queryTypeLabel": "가이드",
+          "title": "대전 아반떼 시승 구매 가이드 — 후회 없는 체크리스트",
+          "targetKeyword": "대전 아반떼 시승",
+          "model": "아반떼",
+          "intent": "시승",
+          "audience": "차량 교체",
+          "region": "대전",
+          "outline": [
+            "핵심 요약(300자)",
+            "구매 전 체크포인트",
+            "옵션·색상 선택",
+            "비용·유지비",
+            "정리 + 상담 안내"
+          ]
+        },
+        "google": {
+          "channel": "google",
+          "queryType": "definition",
+          "queryTypeLabel": "정의형",
+          "title": "코나 옵션 선택, 무엇부터 봐야 할까 — 조건·종류 총정리 (2026)",
+          "targetKeyword": "코나 옵션 선택",
+          "model": "코나",
+          "intent": "옵션 선택",
+          "audience": "사회초년생 첫차",
+          "region": "전국",
+          "outline": [
+            "옵션 선택 정의와 기본 개념",
+            "종류·조건 한눈에",
+            "장단점 비교",
+            "자주 묻는 질문(FAQ)",
+            "정리 + 상담 안내"
+          ]
+        }
+      }
+    },
+    {
+      "date": "2026-07-11",
+      "kdate": "7월 11일(토)",
+      "posts": {
+        "naver": {
+          "channel": "naver",
+          "queryType": "news",
+          "queryTypeLabel": "소식형",
+          "title": "코나 신차·프로모션 소식 — 옵션 선택에 미치는 영향",
+          "targetKeyword": "세종 코나 옵션 선택",
+          "model": "코나",
+          "intent": "옵션 선택",
+          "audience": "사회초년생 첫차",
+          "region": "세종",
+          "outline": [
+            "이번 변화 개요",
+            "핵심 포인트",
+            "견적·구매에 미치는 영향",
+            "대상별 추천",
+            "정리 + 상담 안내"
+          ]
+        },
+        "google": {
+          "channel": "google",
+          "queryType": "howto",
+          "queryTypeLabel": "방법형",
+          "title": "아이오닉5 색상 똑똑하게 받는 법 — 카마스터가 알려주는 5단계",
+          "targetKeyword": "아이오닉5 색상",
+          "model": "아이오닉5",
+          "intent": "색상",
+          "audience": "패밀리카",
+          "region": "전국",
+          "outline": [
+            "시작 전 준비물",
+            "단계별 방법 (1~5)",
+            "놓치면 손해 보는 주의점",
+            "체크리스트",
+            "정리 + 상담 안내"
+          ]
+        }
+      }
+    },
+    {
+      "date": "2026-07-12",
+      "kdate": "7월 12일(일)",
+      "posts": {
+        "naver": {
+          "channel": "naver",
+          "queryType": "faq",
+          "queryTypeLabel": "FAQ형",
+          "title": "충청 아이오닉5 색상 자주 묻는 질문 BEST 6 — 카마스터 답변",
+          "targetKeyword": "충청 아이오닉5 색상",
+          "model": "아이오닉5",
+          "intent": "색상",
+          "audience": "패밀리카",
+          "region": "충청",
+          "outline": [
+            "Q1~Q6 (고객 언어 질문)",
+            "핵심 요약",
+            "정리 + 상담 안내"
+          ]
+        },
+        "google": {
+          "channel": "google",
+          "queryType": "compare",
+          "queryTypeLabel": "비교형",
+          "title": "아이오닉6 vs G80 비교 — 견적·옵션·유지비 총정리",
+          "targetKeyword": "아이오닉6 G80 비교",
+          "model": "아이오닉6",
+          "intent": "유지비",
+          "audience": "법인차",
+          "region": "전국",
+          "outline": [
+            "비교 기준 안내",
+            "항목별 비교표(가격·옵션·유지비)",
+            "상황별 추천 결론",
+            "FAQ",
+            "정리 + 상담 안내"
+          ]
+        }
+      }
+    }
+  ]
+}
