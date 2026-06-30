@@ -6,7 +6,8 @@
   "description": "영상 편집·썸네일·블로그 자동화 (유튜브/인스타/네이버)",
   "scripts": {
     "thumb": "node scripts/make-thumbnail.mjs",
-    "pick": "node scripts/pick-content.mjs"
+    "pick": "node scripts/pick-content.mjs",
+    "edit": "node scripts/process-video.mjs"
   },
   "dependencies": {
     "playwright-core": "^1.61.1",

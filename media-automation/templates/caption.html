@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { background: transparent; }
+  #stage { position: relative; overflow: hidden; }
+  #cap {
+    position: absolute; left: 0; right: 0;
+    display: flex; justify-content: center;
+  }
+  #box {
+    display: inline-block;
+    text-align: center;
+    font-weight: 800;
+    color: #fff;
+    backdrop-filter: blur(2px);
+  }
+  #box .line { white-space: nowrap; }
+  #box .accent { color: var(--accent); }
+</style>
+</head>
+<body>
+  <div id="stage">
+    <div id="cap"><div id="box"></div></div>
+  </div>
+<script>
+  const D = window.__CAP__;
+  const c = D.caption;
+  const stage = document.getElementById('stage');
+  stage.style.width = D.width + 'px';
+  stage.style.height = D.height + 'px';
+  document.body.style.fontFamily = D.fontFamily;
+
+  const cap = document.getElementById('cap');
+  cap.style.top = (D.height * c.topPct / 100) + 'px';
+  cap.style.paddingLeft = c.sidePadding + 'px';
+  cap.style.paddingRight = c.sidePadding + 'px';
+
+  const box = document.getElementById('box');
+  box.style.background = c.boxColor;
+  box.style.borderRadius = c.radius + 'px';
+  box.style.padding = c.boxPadV + 'px ' + c.boxPadH + 'px';
+  box.style.fontSize = c.fontSize + 'px';
+  box.style.lineHeight = c.lineHeight;
+  box.style.color = c.textColor;
+  box.style.setProperty('--accent', c.accentColor);
+  box.innerHTML = (D.lines || []).map((l) => {
+    const accent = typeof l === 'object' && l.accent;
+    const text = (typeof l === 'object' ? l.text : l)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;');
+    return '<div class="line' + (accent ? ' accent' : '') + '">' + text + '</div>';
+  }).join('');
+
+  window.__READY__ = true;
+</script>
+</body>
+</html>

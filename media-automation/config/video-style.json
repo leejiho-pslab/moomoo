@@ -1,0 +1,39 @@
+{
+  "$comment": "영상 편집 '고정 폼'. 편집본(비오는날.mp4, 0627(3).mp4)에서 읽어낸 형태를 규격화. 세로 9:16 + 상단 자막 박스 + (옵션)하단 명함.",
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "fontFamily": "Noto Sans CJK KR, NanumSquare, sans-serif",
+
+  "caption": {
+    "$comment": "상단 인사 자막 (날짜+메시지). 둥근 반투명 박스 위 흰색 굵은 글씨, 가운데 정렬.",
+    "topPct": 6,
+    "sidePadding": 56,
+    "boxColor": "rgba(10,16,34,0.62)",
+    "radius": 30,
+    "boxPadV": 34,
+    "boxPadH": 44,
+    "textColor": "#FFFFFF",
+    "accentColor": "#FFD60A",
+    "fontSize": 78,
+    "lineHeight": 1.28,
+    "fontWeight": 800
+  },
+
+  "contactCard": {
+    "$comment": "하단 명함 노출 (실제 명함 이미지). 영상 끝 N초 동안 페이드 인.",
+    "enabled": true,
+    "asset": "assets/brand/business-card.jpg",
+    "widthPct": 86,
+    "bottomPct": 6,
+    "radius": 24,
+    "showFromEndSec": 4,
+    "fadeSec": 0.5
+  },
+
+  "outputs": {
+    "$comment": "채널별 출력. 둘 다 세로(쇼츠/릴스)지만 파일을 분리해 바로 업로드 가능하게.",
+    "instagram": { "suffix": "instagram", "width": 1080, "height": 1920 },
+    "youtube":   { "suffix": "youtube",   "width": 1080, "height": 1920 }
+  }
+}
