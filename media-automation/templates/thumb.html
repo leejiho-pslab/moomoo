@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { background: #000; }
+  #stage {
+    position: relative;
+    overflow: hidden;
+  }
+  #bg {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+  }
+  #scrim { position: absolute; inset: 0; }
+  #content {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+  }
+  .badge {
+    position: absolute;
+    background: var(--badgeBg);
+    color: var(--badgeText);
+    font-weight: 800;
+    border-radius: 999px;
+    padding: 0.42em 0.9em;
+    line-height: 1;
+    white-space: nowrap;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.25);
+  }
+  .block { display: flex; flex-direction: column; }
+  .eyebrow {
+    font-weight: 700;
+    color: var(--eyebrow);
+    margin-bottom: 0.5em;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.55);
+  }
+  .eyebrow.accent { color: var(--accent); }
+  .headline {
+    font-weight: 900;
+    color: var(--headline);
+    letter-spacing: -0.02em;
+    text-shadow: 0 3px 16px rgba(0,0,0,0.55);
+  }
+  .subline {
+    color: var(--subline);
+    font-weight: 500;
+    margin-top: 0.7em;
+    opacity: 0.95;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.6);
+  }
+
+  /* 인스타: 하단 정렬 (세로 9:16) */
+  .platform-instagram #content { justify-content: flex-end; }
+  .platform-instagram .block { padding: 0 var(--pad) var(--blockBottom); }
+
+  /* 유튜브: 좌측 중앙 정렬 (가로 16:9) — 인스타와 다른 구성 */
+  .platform-youtube #content { justify-content: center; }
+  .platform-youtube .block { padding: 0 var(--pad); max-width: var(--maxw); }
+</style>
+</head>
+<body>
+  <div id="stage">
+    <img id="bg" />
+    <div id="scrim"></div>
+    <div id="content">
+      <div class="badge"></div>
+      <div class="block">
+        <div class="eyebrow"></div>
+        <div class="headline"></div>
+        <div class="subline"></div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  const D = window.__DATA__;
+  const p = D.platformSpec;
+  const c = D.style.colors;
+  const root = document.documentElement;
+  root.style.setProperty('--badgeBg', c.badgeBg);
+  root.style.setProperty('--badgeText', c.badgeText);
+  root.style.setProperty('--headline', c.headline);
+  root.style.setProperty('--eyebrow', c.eyebrow);
+  root.style.setProperty('--accent', c.accent);
+  root.style.setProperty('--subline', c.subline);
+  root.style.setProperty('--pad', p.padding + 'px');
+  root.style.setProperty('--blockBottom', (p.blockBottom || 0) + 'px');
+  if (p.maxWidthPct) root.style.setProperty('--maxw', p.maxWidthPct + '%');
+
+  document.body.className = 'platform-' + D.platform;
+  const stage = document.getElementById('stage');
+  stage.style.width = p.width + 'px';
+  stage.style.height = p.height + 'px';
+
+  document.getElementById('bg').src = D.bgDataUrl;
+  document.getElementById('scrim').style.background = p.scrim;
+  document.body.style.fontFamily = D.style.fontFamily;
+
+  const badge = document.querySelector('.badge');
+  badge.textContent = D.badge;
+  badge.style.top = p.badge.top + 'px';
+  badge.style.left = p.badge.left + 'px';
+  badge.style.fontSize = p.badge.fontSize + 'px';
+
+  const eb = document.querySelector('.eyebrow');
+  eb.textContent = D.eyebrow || '';
+  if (D.eyebrowAccent) eb.classList.add('accent');
+  eb.style.fontSize = p.eyebrowSize + 'px';
+  if (!D.eyebrow) eb.style.display = 'none';
+
+  const hl = document.querySelector('.headline');
+  hl.style.fontSize = p.headlineSize + 'px';
+  hl.style.lineHeight = p.headlineLineHeight;
+  hl.innerHTML = (D.headline || []).map((l) =>
+    '<div>' + l.replace(/&/g,'&amp;').replace(/</g,'&lt;') + '</div>').join('');
+
+  const sl = document.querySelector('.subline');
+  sl.style.fontSize = p.sublineSize + 'px';
+  sl.style.lineHeight = p.sublineLineHeight;
+  if (D.subline && D.subline.length) {
+    sl.innerHTML = D.subline.map((l) =>
+      '<div>' + l.replace(/&/g,'&amp;').replace(/</g,'&lt;') + '</div>').join('');
+  } else {
+    sl.style.display = 'none';
+  }
+
+  window.__READY__ = true;
+</script>
+</body>
+</html>

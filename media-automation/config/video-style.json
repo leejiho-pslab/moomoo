@@ -1,0 +1,54 @@
+{
+  "$comment": "영상 편집 '고정 폼' + 여러 스타일. 매일 스타일을 돌려가며(rotation) 같은 형식이라도 다른 느낌이 나게 한다.",
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "fontFamily": "Noto Sans CJK KR, NanumSquare, sans-serif",
+
+  "caption": {
+    "$comment": "모든 스타일 공통값",
+    "sidePadding": 56,
+    "lineHeight": 1.26,
+    "fontWeight": 800,
+    "textColor": "#FFFFFF",
+    "accentColor": "#FFD60A"
+  },
+
+  "styles": {
+    "$comment": "자막 스타일 4종. anchor=위치, box=박스형태(bar/rounded/none).",
+    "bar": {
+      "label": "상단 풀바", "anchor": "top", "topPct": 7, "box": "bar",
+      "boxColor": "rgba(8,12,28,0.86)", "padV": 30, "padH": 40,
+      "align": "center", "fontSize": 76
+    },
+    "box": {
+      "label": "상단 둥근박스", "anchor": "top", "topPct": 6, "box": "rounded", "radius": 30,
+      "boxColor": "rgba(10,16,34,0.62)", "padV": 34, "padH": 44,
+      "align": "center", "fontSize": 76
+    },
+    "lower": {
+      "label": "하단 좌측", "anchor": "bottom", "bottomPct": 20, "box": "none",
+      "align": "left", "fontSize": 96, "accentFirst": true
+    },
+    "side": {
+      "label": "좌측 세로바", "anchor": "center", "box": "none",
+      "align": "left", "fontSize": 88, "sideBar": true, "sideBarColor": "#FFD60A"
+    }
+  },
+
+  "rotation": ["bar", "box", "lower", "side"],
+
+  "contactCard": {
+    "$comment": "하단 명함 노출(실제 명함). 전체 노출(타이밍 정교화는 후속).",
+    "enabled": true,
+    "asset": "assets/brand/business-card.jpg",
+    "widthPct": 86,
+    "bottomPct": 6,
+    "radius": 24
+  },
+
+  "outputs": {
+    "instagram": { "suffix": "instagram", "width": 1080, "height": 1920 },
+    "youtube":   { "suffix": "youtube",   "width": 1080, "height": 1920 }
+  }
+}

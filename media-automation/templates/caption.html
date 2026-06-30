@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { background: transparent; }
+  #stage { position: relative; overflow: hidden; }
+  #cap { position: absolute; left: 0; right: 0; display: flex; }
+  #box {
+    font-weight: 800; color: #fff;
+    text-shadow: 0 3px 14px rgba(0,0,0,0.5);
+  }
+  #box .line { white-space: nowrap; }
+  #box .accent { color: var(--accent); }
+  #bar-wrap { position: absolute; left: 0; right: 0; }
+  #bar-wrap #box { width: 100%; text-align: center; }
+</style>
+</head>
+<body>
+  <div id="stage">
+    <div id="cap"><div id="box"></div></div>
+  </div>
+<script>
+  const D = window.__CAP__;
+  const s = D.style;             // 해석된(공통+스타일) 객체
+  const stage = document.getElementById('stage');
+  stage.style.width = D.width + 'px';
+  stage.style.height = D.height + 'px';
+  document.body.style.fontFamily = D.fontFamily;
+
+  const cap = document.getElementById('cap');
+  const box = document.getElementById('box');
+  box.style.setProperty('--accent', s.accentColor);
+  box.style.fontSize = s.fontSize + 'px';
+  box.style.lineHeight = s.lineHeight;
+  box.style.fontWeight = s.fontWeight;
+  box.style.color = s.textColor;
+
+  // 위치(anchor)
+  cap.style.paddingLeft = s.sidePadding + 'px';
+  cap.style.paddingRight = s.sidePadding + 'px';
+  if (s.anchor === 'top') { cap.style.top = (D.height * (s.topPct || 6) / 100) + 'px'; }
+  else if (s.anchor === 'bottom') { cap.style.bottom = (D.height * (s.bottomPct || 16) / 100) + 'px'; }
+  else { cap.style.top = '0'; cap.style.bottom = '0'; cap.style.alignItems = 'center'; }
+
+  // 정렬
+  cap.style.justifyContent = (s.align === 'left') ? 'flex-start' : 'center';
+  box.style.textAlign = s.align || 'center';
+
+  // 박스 형태
+  if (s.box === 'bar') {
+    // 풀바: 화면 가로 전체를 덮는 띠
+    cap.style.paddingLeft = '0'; cap.style.paddingRight = '0';
+    cap.style.left = '0'; cap.style.right = '0';
+    box.style.width = '100%';
+    box.style.background = s.boxColor;
+    box.style.padding = (s.padV || 30) + 'px ' + (s.padH || 40) + 'px';
+  } else if (s.box === 'rounded') {
+    box.style.display = 'inline-block';
+    box.style.background = s.boxColor;
+    box.style.borderRadius = (s.radius || 28) + 'px';
+    box.style.padding = (s.padV || 32) + 'px ' + (s.padH || 44) + 'px';
+    box.style.backdropFilter = 'blur(2px)';
+  } else {
+    box.style.background = 'transparent';
+  }
+
+  // 좌측 세로 강조바
+  if (s.sideBar) {
+    box.style.borderLeft = '12px solid ' + (s.sideBarColor || s.accentColor);
+    box.style.paddingLeft = '34px';
+  }
+
+  // 본문
+  box.innerHTML = (D.lines || []).map((l, i) => {
+    const accent = (typeof l === 'object' && l.accent) || (s.accentFirst && i === 0);
+    const text = (typeof l === 'object' ? l.text : l).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+    return '<div class="line' + (accent ? ' accent' : '') + '">' + text + '</div>';
+  }).join('');
+
+  window.__READY__ = true;
+</script>
+</body>
+</html>
