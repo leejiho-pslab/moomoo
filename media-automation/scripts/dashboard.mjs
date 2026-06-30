@@ -106,6 +106,7 @@ const html = `<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><style>
     <div class="panel"><h3 style="font-size:16px;font-weight:800;margin-bottom:12px">✍️ 블로그 원고 ${links.blog?.latestName ? `· ${esc(links.blog.latestName)}` : ''}</h3>
       ${links.blog?.folder ? `<a href="${links.blog.folder}" target="_blank" style="display:inline-block;background:#14246B;color:#fff;text-decoration:none;font-weight:700;font-size:14px;padding:10px 18px;border-radius:10px;margin-bottom:12px">📂 블로그 원고 폴더 열기</a>` : '<div class="muted">아직 없음</div>'}
       ${(links.blog?.items || []).map((f) => `<div class="kv"><a href="${f.link}" target="_blank" style="color:#cfe0ff;text-decoration:none;font-size:13px">⬇️ ${esc(f.name)}</a></div>`).join('')}
+      <a href="../blog/" style="display:inline-block;margin-top:12px;background:linear-gradient(135deg,#3b82f6,#a855f7);color:#fff;text-decoration:none;font-weight:800;font-size:14px;padding:11px 18px;border-radius:10px">🗂️ 블로그 콘텐츠 관제실 열기 →</a>
     </div>
   </div>
 
