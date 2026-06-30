@@ -20,6 +20,7 @@ const content = readJson(join(ROOT, 'config', 'content-rules.json'), {});
 const vstyle = readJson(join(ROOT, 'config', 'video-style.json'), {});
 const auto = readJson(join(ROOT, 'config', 'automation.json'), {});
 const processed = readJson(join(ROOT, 'state', 'processed.json'), []);
+const links = readJson(join(ROOT, 'state', 'drive-links.json'), {});
 
 function dataUrl(p) {
   if (!p || !existsSync(p)) return '';
@@ -94,6 +95,18 @@ const html = `<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><style>
 
   <div class="grid cards">
     ${modules.map((m) => { const b = badge[m.state]; return `<div class="card"><div class="nm">${esc(m.name)}</div><div class="sb">${esc(m.sub)}</div><div class="st" style="color:${b[1]}">${b[0]} ${b[2]}</div></div>`; }).join('')}
+  </div>
+
+  <h2>📥 다운로드 (구글드라이브) <span class="tag">받아서 각 채널에 업로드</span></h2>
+  <div class="grid two">
+    <div class="panel"><h3 style="font-size:16px;font-weight:800;margin-bottom:12px">🎬 영상 완성본 ${links.video?.latestName ? `· ${esc(links.video.latestName)}` : ''}</h3>
+      ${links.video?.folder ? `<a href="${links.video.folder}" target="_blank" style="display:inline-block;background:#14246B;color:#fff;text-decoration:none;font-weight:700;font-size:14px;padding:10px 18px;border-radius:10px;margin-bottom:12px">📂 영상 완성본 폴더 열기</a>` : '<div class="muted">아직 없음</div>'}
+      ${(links.video?.items || []).map((f) => `<div class="kv"><a href="${f.link}" target="_blank" style="color:#cfe0ff;text-decoration:none;font-size:13px">⬇️ ${esc(f.name)}</a></div>`).join('')}
+    </div>
+    <div class="panel"><h3 style="font-size:16px;font-weight:800;margin-bottom:12px">✍️ 블로그 원고 ${links.blog?.latestName ? `· ${esc(links.blog.latestName)}` : ''}</h3>
+      ${links.blog?.folder ? `<a href="${links.blog.folder}" target="_blank" style="display:inline-block;background:#14246B;color:#fff;text-decoration:none;font-weight:700;font-size:14px;padding:10px 18px;border-radius:10px;margin-bottom:12px">📂 블로그 원고 폴더 열기</a>` : '<div class="muted">아직 없음</div>'}
+      ${(links.blog?.items || []).map((f) => `<div class="kv"><a href="${f.link}" target="_blank" style="color:#cfe0ff;text-decoration:none;font-size:13px">⬇️ ${esc(f.name)}</a></div>`).join('')}
+    </div>
   </div>
 
   <h2>🎬 채널별 영상 <span class="tag">같은 원본 → 채널에 맞게 다른 편집점·자막</span></h2>
