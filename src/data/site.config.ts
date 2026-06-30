@@ -251,7 +251,7 @@ export const site: SiteConfig = {
   instagram: {
     title: '인스타그램',
     description: '일상 속 생생한 출고 현장과 차량 이야기.',
-    profileUrl: 'https://www.instagram.com/',
+    profileUrl: 'https://www.instagram.com/hyundai_moomoo',
   },
   contact: {
     title: '지금 상담하세요',
