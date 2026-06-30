@@ -1,0 +1,21 @@
+{
+  "$comment": "자동화 설정. 폴더 ID는 환경변수(GitHub Secret/Variable)로도 덮어쓸 수 있다.",
+
+  "inputFolderId": "PUT_INPUT_FOLDER_ID_HERE",
+  "outputFolderId": "",
+  "outputFolderName": "완성본 (자동생성)",
+
+  "$comment2": "환경변수 우선순위: GDRIVE_INPUT_FOLDER_ID > inputFolderId, GDRIVE_OUTPUT_FOLDER_ID > outputFolderId",
+
+  "makeThumbnails": true,
+  "thumbnailFrameSec": 1.2,
+
+  "$comment3": "영상 자막은 (1) 날짜 + (2) 아래 인사 풀에서 로테이션. 파일별로 다른 인사가 붙는다.",
+  "greetings": [
+    { "line2": "오늘도", "line3": "인사드립니다" },
+    { "line2": "좋은 하루", "line3": "되세요" },
+    { "line2": "언제든 견적·상담", "line3": "환영합니다" },
+    { "line2": "오늘도 안전운행", "line3": "하세요" },
+    { "line2": "차 고민은", "line3": "편하게 연락주세요" }
+  ]
+}

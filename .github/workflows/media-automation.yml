@@ -1,0 +1,60 @@
+name: media-automation
+# 무인 공장: 매일 드라이브 "원본" 폴더의 새 영상을 편집·썸네일 → "완성본" 폴더에 저장
+on:
+  schedule:
+    - cron: '0 21 * * *'   # 매일 06:00 KST
+  workflow_dispatch:        # 수동 실행 버튼
+
+permissions:
+  contents: write           # 처리 기록(state/processed.json) 커밋용
+
+concurrency:
+  group: media-automation
+  cancel-in-progress: false
+
+jobs:
+  process:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: media-automation
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: media-automation/package-lock.json
+
+      - name: Install ffmpeg + Korean fonts
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ffmpeg fonts-noto-cjk fonts-noto-cjk-extra fonts-nanum
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Chromium (for caption/thumbnail rendering)
+        run: |
+          npx -y playwright@1.61.1 install --with-deps chromium
+          echo "CHROME_PATH=$(find $HOME/.cache/ms-playwright -name chrome -type f | head -1)" >> "$GITHUB_ENV"
+
+      - name: Run automation
+        env:
+          GDRIVE_SA_KEY: ${{ secrets.GDRIVE_SA_KEY }}
+          GDRIVE_INPUT_FOLDER_ID: ${{ vars.GDRIVE_INPUT_FOLDER_ID }}
+          GDRIVE_OUTPUT_FOLDER_ID: ${{ vars.GDRIVE_OUTPUT_FOLDER_ID }}
+        run: npm run auto
+
+      - name: Save processed ledger
+        if: always()
+        run: |
+          cd "$GITHUB_WORKSPACE"
+          if ! git diff --quiet -- media-automation/state/processed.json; then
+            git config user.name "media-automation"
+            git config user.email "actions@github.com"
+            git add media-automation/state/processed.json
+            git commit -m "chore: update media-automation processed ledger [skip ci]"
+            git push
+          fi
