@@ -1,0 +1,65 @@
+{
+  "$comment": "블로그 반자동화 설정. 채널·주기·키워드·현대 정보·CTA. 이 파일만 고치면 주제/말투/대상이 바뀐다.",
+
+  "persona": {
+    "name": "김무겸",
+    "title": "카마스터(과장)",
+    "store": "현대자동차 대전선화대리점",
+    "brands": "현대 · 제네시스",
+    "experience": "자동차 영업 11년 · 수입·국산 5개 브랜드 경험 · 전국 판매 TOP10",
+    "region": "대전 · 세종 · 충청 (전국 출고 가능)",
+    "phone": "010-8033-3522",
+    "email": "mookyumi@naver.com",
+    "youtube": "https://m.youtube.com/@hyundai_moomoo"
+  },
+
+  "hyundai": {
+    "$comment": "현대 공식 홈페이지 정보·이미지 적극 활용 (핫링크 대신 출처 표기 + 다운로드 권장).",
+    "homepage": "https://www.hyundai.com/kr/ko",
+    "genesis": "https://www.genesis.com/kr/ko",
+    "models": ["그랜저", "싼타페", "팰리세이드", "투싼", "아반떼", "코나", "아이오닉5", "아이오닉6", "캐스퍼", "스타리아", "G80", "GV80", "GV70", "G90"]
+  },
+
+  "channels": {
+    "naver": {
+      "label": "네이버 블로그",
+      "goal": "네이버 키워드 상위노출",
+      "style": "경험·후기 중심, 지역 롱테일 키워드, 친근하고 신뢰감 있는 1인칭, 이미지 다수, 해시태그",
+      "format": "markdown",
+      "cadencePerDay": 1
+    },
+    "google": {
+      "label": "구글 블로그(Blogger)",
+      "goal": "구글 키워드 상위노출 (GEO/E-E-A-T)",
+      "style": "정의형/방법형/비교형 질의 타겟, 시맨틱 HTML5, FAQ 스키마, 출처·데이터 명시, 전문적이되 쉬운 설명",
+      "format": "html",
+      "cadencePerDay": 1
+    }
+  },
+
+  "keywordSeeds": {
+    "$comment": "모델 × 인텐트 × 지역을 조합해 롱테일 키워드 생성",
+    "intents": ["견적", "할부", "리스·장기렌트", "출고", "시승", "옵션 선택", "색상", "유지비", "신차 프로모션", "보조금(전기차)"],
+    "region": ["대전", "세종", "충청", "전국"],
+    "audience": ["사회초년생 첫차", "패밀리카", "법인차", "전기차 입문", "차량 교체"]
+  },
+
+  "queryTypes": {
+    "$comment": "GEO 체크리스트의 쿼리 타입 로테이션 (정의형/방법형/비교형 + 후기/가이드/소식)",
+    "rotation": ["definition", "howto", "compare", "review", "guide", "news", "faq"],
+    "defs": {
+      "definition": { "label": "정의형", "pattern": "{kw} 뜻·총정리 (What is)" },
+      "howto":      { "label": "방법형", "pattern": "{kw} 받는 법·하는 법 (How to)" },
+      "compare":    { "label": "비교형", "pattern": "{a} vs {b}·BEST 비교" },
+      "review":     { "label": "후기형", "pattern": "{kw} 실구매·출고 후기 (경험 E-E-A-T)" },
+      "guide":      { "label": "가이드", "pattern": "{kw} 구매 체크리스트·가이드" },
+      "news":       { "label": "소식형", "pattern": "{kw} 신차·프로모션 소식" },
+      "faq":        { "label": "FAQ형", "pattern": "{kw} 자주 묻는 질문 정리" }
+    }
+  },
+
+  "cta": {
+    "text": "견적·시승·출고 상담은 부담 없이 연락 주세요. 전국 어디든 후회 없는 한 대를 함께 고릅니다.",
+    "internalLinks": ["전체 차종 견적 안내", "출고 후기 모음", "전기차 보조금 가이드"]
+  }
+}

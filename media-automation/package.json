@@ -9,7 +9,9 @@
     "pick": "node scripts/pick-content.mjs",
     "edit": "node scripts/process-video.mjs",
     "auto": "node scripts/run-automation.mjs",
-    "dash": "node scripts/dashboard.mjs"
+    "dash": "node scripts/dashboard.mjs",
+    "blog:plan": "node blog/scripts/plan-week.mjs",
+    "blog:write": "node blog/scripts/write-post.mjs"
   },
   "dependencies": {
     "googleapis": "^173.0.0",

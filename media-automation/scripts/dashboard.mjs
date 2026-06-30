@@ -42,7 +42,7 @@ const modules = [
   { name: '썸네일 생성', sub: '유튜브·인스타 / 매일 문구 변경·중복방지', state: 'done' },
   { name: '영상 편집', sub: '세로 9:16 · 4스타일 로테이션 · 명함', state: 'done' },
   { name: '무인 자동화', sub: 'GitHub Actions · 매일 06:00', state: autoOn ? 'done' : 'wait' },
-  { name: '블로그', sub: '하루 2회 · 네이버 SEO (예정)', state: 'todo' },
+  { name: '블로그', sub: '네이버+구글 일 1회 · 일요일 기획·매일 원고', state: 'wait' },
 ];
 const badge = { done: ['●', '#16a34a', '작동'], wait: ['◐', '#f59e0b', '켜기 대기'], todo: ['○', '#94a3b8', '예정'] };
 

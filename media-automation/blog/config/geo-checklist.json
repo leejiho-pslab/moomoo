@@ -1,0 +1,31 @@
+{
+  "$comment": "첨부 'GEO 체크리스트'(26항목)를 시스템 검수 기준으로 박제. 원고 생성 시 프롬프트에 주입하고, 생성 후 자가 점검에 사용한다.",
+  "source": "seogeo___1.xlsx · 공유 GEO 체크리스트",
+  "items": [
+    { "id": "longtail_first_para", "rule": "첫 문단에 타겟 롱테일 키워드 포함", "why": "검색엔진이 주제를 빠르게 파악" },
+    { "id": "bold_key_info", "rule": "중요 정보는 굵은 글씨로 강조", "why": "핵심 내용 명확 전달" },
+    { "id": "img_alt", "rule": "이미지 ALT 태그 작성 (롱테일 키워드 포함, 1~5문장)", "why": "이미지 검색 최적화·접근성" },
+    { "id": "meta_desc", "rule": "메타 디스크립션에 핵심 키워드 포함", "why": "검색결과 클릭률·관련성" },
+    { "id": "freshness_review", "rule": "3~6개월마다 주요 콘텐츠 검토·수정", "why": "최신성 유지" },
+    { "id": "semantic_html5", "rule": "시맨틱 HTML5 (header/nav/main/article/section)", "why": "구조 이해도 향상 (구글용)" },
+    { "id": "heading_hierarchy", "rule": "H1→H2→H3 계층 구조", "why": "중요도·구조 파악" },
+    { "id": "topic_coverage", "rule": "경쟁사만큼 핵심 주제를 깊이 다룸", "why": "주제 권위성" },
+    { "id": "recent_update", "rule": "주요 페이지 6개월 내 업데이트", "why": "최신성·관리됨 신호" },
+    { "id": "published_date", "rule": "게시일/최종 검토일 표시", "why": "신선도 명시" },
+    { "id": "high_quality_relevant", "rule": "핵심 전문분야 관련 고품질 콘텐츠 위주", "why": "E-E-A-T" },
+    { "id": "faq_schema", "rule": "고객 언어 질문 기반 FAQ 스키마", "why": "음성검색·Featured Snippet" },
+    { "id": "company_news", "rule": "회사/제품 뉴스 게시", "why": "브랜드 최신성·활동성" },
+    { "id": "first_party_data", "rule": "자사(1st party) 데이터 기반 콘텐츠", "why": "차별화·독창성" },
+    { "id": "experience_based", "rule": "경험 기반 콘텐츠 (Experience)", "why": "E-E-A-T 경험 강화" },
+    { "id": "impact_summary", "rule": "도입부에 핵심 요약문 300자 내외", "why": "이탈률↓·Featured Snippet" },
+    { "id": "visual_formats", "rule": "테이블·인포그래픽 등 시각 포맷 배치", "why": "체류시간·전달력" },
+    { "id": "cited_numbers", "rule": "수치 데이터에 출처·발행연도 명시", "why": "신뢰성(Trust)" },
+    { "id": "expert_but_clear", "rule": "전문적이되 비전문가도 이해 가능", "why": "넓은 검색의도 충족" },
+    { "id": "external_links", "rule": "신뢰도 높은 외부 링크 2개 이상", "why": "신뢰성·품질 신호" },
+    { "id": "internal_links_cta", "rule": "내부 링크+CTA로 연관 콘텐츠 연결", "why": "체류시간·권위도" },
+    { "id": "q_definition", "rule": "정의형 쿼리 타겟 (What is...)", "why": "정보성 노출·인지도" },
+    { "id": "q_compare", "rule": "추천/비교형 쿼리 타겟 (Best/vs...)", "why": "구매의도·전환율" },
+    { "id": "q_howto", "rule": "방법형 쿼리 타겟 (How to...)", "why": "고검색량·신뢰도" },
+    { "id": "request_indexing", "rule": "업데이트 시 검색엔진 인덱싱 요청", "why": "빠른 색인 반영" }
+  ]
+}

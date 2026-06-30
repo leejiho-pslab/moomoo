@@ -1,0 +1,58 @@
+name: blog-automation
+# 네이버+구글 블로그: 일요일 차주 기획 / 매일 그날 원고 자동 생성 → 저장소에 저장(다운로드)
+on:
+  schedule:
+    - cron: '0 20 * * 0'    # 일요일 05:00 KST → 차주 기획
+    - cron: '30 21 * * *'   # 매일 06:30 KST → 그날 원고
+  workflow_dispatch:
+    inputs:
+      task:
+        description: '실행할 작업'
+        type: choice
+        options: [auto, plan, write]
+        default: auto
+
+permissions:
+  contents: write
+
+concurrency:
+  group: blog-automation
+  cancel-in-progress: false
+
+jobs:
+  blog:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: media-automation
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: media-automation/package-lock.json
+      - run: npm ci
+
+      - name: 주간 기획 (일요일 / 수동 plan·auto)
+        if: github.event.schedule == '0 20 * * 0' || github.event.inputs.task == 'plan' || github.event.inputs.task == 'auto'
+        run: node blog/scripts/plan-week.mjs
+
+      - name: 일일 원고 (매일 / 수동 write·auto)
+        if: github.event.schedule == '30 21 * * *' || github.event.inputs.task == 'write' || github.event.inputs.task == 'auto'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_MODEL: ${{ vars.ANTHROPIC_MODEL }}
+        run: node blog/scripts/write-post.mjs
+
+      - name: 결과 저장(커밋)
+        if: always()
+        run: |
+          cd "$GITHUB_WORKSPACE"
+          if ! git diff --quiet -- media-automation/blog/output; then
+            git config user.name "blog-automation"
+            git config user.email "actions@github.com"
+            git add media-automation/blog/output
+            git commit -m "chore(blog): 자동 생성 기획·원고 업데이트 [skip ci]"
+            git push
+          fi
