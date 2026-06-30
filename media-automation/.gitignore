@@ -1,4 +1,5 @@
 node_modules/
 /output/
 assets/sample/*.mp4
+assets/clips/
 blog/output/posts/_tmp/
