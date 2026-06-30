@@ -33,6 +33,18 @@ const captionRaw = arg('caption', '');
 const lines = captionRaw ? String(captionRaw).split('|').map((s) => s.trim()).filter(Boolean) : [];
 const platforms = arg('platform') ? [arg('platform')] : Object.keys(style.outputs);
 
+// 스타일 선택: --style 지정 > 날짜 로테이션 > 첫 스타일
+const rotation = style.rotation || Object.keys(style.styles);
+function pickStyle() {
+  const forced = arg('style');
+  if (forced && style.styles[forced]) return forced;
+  const day = Math.floor(Date.now() / 86400000); // 일 단위 인덱스
+  return rotation[day % rotation.length];
+}
+const styleName = pickStyle();
+const resolvedStyle = { ...style.caption, ...style.styles[styleName] };
+console.log(`🎨 편집 스타일: ${styleName} (${resolvedStyle.label || ''})`);
+
 const outDir = join(ROOT, 'output');
 mkdirSync(outDir, { recursive: true });
 const base = basename(inPath, extname(inPath));
@@ -45,7 +57,10 @@ if (lines.length) {
     viewport: { width: style.width, height: style.height },
     deviceScaleFactor: 1,
   });
-  await page.addInitScript((payload) => { window.__CAP__ = payload; }, { ...style, lines });
+  await page.addInitScript((payload) => { window.__CAP__ = payload; }, {
+    width: style.width, height: style.height, fontFamily: style.fontFamily,
+    lines, style: resolvedStyle,
+  });
   await page.goto(pathToFileURL(join(ROOT, 'templates', 'caption.html')).href, { waitUntil: 'load' });
   await page.waitForFunction(() => window.__READY__ === true);
   await page.evaluate(() => document.fonts.ready);
@@ -58,7 +73,9 @@ if (lines.length) {
 // ---- 2) ffmpeg 합성 ---------------------------------------------------
 const W = style.width, H = style.height;
 const card = style.contactCard;
-const cardPath = card?.enabled ? resolve(ROOT, card.asset) : null;
+// 하단 자막 스타일은 명함과 겹치므로 명함 생략
+const cardAllowed = card?.enabled && resolvedStyle.anchor !== 'bottom';
+const cardPath = cardAllowed ? resolve(ROOT, card.asset) : null;
 const hasCard = cardPath && existsSync(cardPath);
 
 for (const platform of platforms) {
