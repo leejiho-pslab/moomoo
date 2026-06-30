@@ -259,7 +259,7 @@ export const site: SiteConfig = {
     phone: '010-8033-3522',
     officeTel: '042-254-9000',
     email: 'mookyumi@naver.com',
-    kakaoUrl: '',
+    kakaoUrl: 'https://open.kakao.com/o/scFQTHBi',
     hours: '연중무휴 09:00 – 20:00 (주말·공휴일 포함)',
     location: '현대자동차 대전선화대리점 · 대전광역시 중구 우암로 4',
   },
