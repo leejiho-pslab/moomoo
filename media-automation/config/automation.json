@@ -1,7 +1,7 @@
 {
   "$comment": "자동화 설정. 폴더 ID는 환경변수(GitHub Secret/Variable)로도 덮어쓸 수 있다.",
 
-  "inputFolderId": "PUT_INPUT_FOLDER_ID_HERE",
+  "inputFolderId": "1PORCSJaim1-waJPsrJUgiVrLwFZvb1pT",
   "outputFolderId": "",
   "outputFolderName": "완성본 (자동생성)",
 

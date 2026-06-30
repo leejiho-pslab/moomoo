@@ -67,8 +67,8 @@ function run(script, args) {
 const drive = getDrive();
 
 if (!outputFolderId) {
-  const parent = (await getFileParent(drive, inputFolderId)) || inputFolderId;
-  outputFolderId = await ensureFolder(drive, cfg.outputFolderName, parent);
+  // 완성본은 공유받은 원본 폴더 '안'에 생성 (서비스 계정 권한 범위 안전)
+  outputFolderId = await ensureFolder(drive, cfg.outputFolderName, inputFolderId);
   console.log(`📁 완성본 폴더: ${cfg.outputFolderName} (${outputFolderId})`);
 }
 
