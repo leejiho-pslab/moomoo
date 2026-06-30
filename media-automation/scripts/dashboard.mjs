@@ -136,6 +136,12 @@ const html = `<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><style>
 const htmlPath = join(out, 'dashboard.html');
 writeFileSync(htmlPath, html);
 
+// 배포용: 저장소 public/dashboard/index.html 로도 발행 (GitHub Pages 에서 /dashboard/ 로 접속)
+const publishDir = join(ROOT, '..', 'public', 'dashboard');
+mkdirSync(publishDir, { recursive: true });
+writeFileSync(join(publishDir, 'index.html'), html);
+console.log('📡 발행 → public/dashboard/index.html');
+
 const browser = await chromium.launch({ executablePath: CHROME });
 const page = await browser.newPage({ viewport: { width: 1240, height: 1400 }, deviceScaleFactor: 1 });
 await page.goto(pathToFileURL(htmlPath).href, { waitUntil: 'load' });
