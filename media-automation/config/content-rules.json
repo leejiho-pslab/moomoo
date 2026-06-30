@@ -1,0 +1,107 @@
+{
+  "$comment": "썸네일에 들어가는 '문구'를 매일 자동으로 만들고 중복을 막는 기준. 주제/표현만 바꾸려면 이 파일만 수정.",
+
+  "brand": {
+    "badge": "김무겸 현대자동차",
+    "handle": "@moomoo_hyundai"
+  },
+
+  "rules": {
+    "$comment": "중복 방지 핵심 기준",
+    "noRepeatHeadlineDays": 120,
+    "noSameTopicConsecutiveDays": 1,
+    "avoidLastNPatterns": 2,
+    "maxCharsPerHeadlineLine": 13,
+    "keywordOverlapReject": 0.6,
+    "maxTries": 200
+  },
+
+  "topics": [
+    { "id": "newcar",   "label": "신차 소개",   "keywords": ["신차", "출시", "디 올뉴", "풀체인지"] },
+    { "id": "delivery", "label": "출고 후기",   "keywords": ["출고", "인도", "고객", "후기"] },
+    { "id": "testdrive","label": "시승 리뷰",   "keywords": ["시승", "주행", "승차감", "리뷰"] },
+    { "id": "promo",    "label": "프로모션",     "keywords": ["할인", "프로모션", "혜택", "조건"] },
+    { "id": "guide",    "label": "구매 가이드", "keywords": ["견적", "구매", "옵션", "가이드"] },
+    { "id": "compare",  "label": "비교",         "keywords": ["비교", "vs", "선택", "차이"] },
+    { "id": "finance",  "label": "리스·할부",   "keywords": ["리스", "할부", "월납", "금융"] },
+    { "id": "tip",      "label": "자동차 상식", "keywords": ["상식", "꿀팁", "관리", "노하우"] }
+  ],
+
+  "slots": {
+    "persona": [
+      "대전 현대 딜러 7년차",
+      "고객만족 1위 딜러",
+      "출고 1,000대 딜러",
+      "현대·제네시스 전문 딜러"
+    ],
+    "audience": [
+      "신차 사는 분",
+      "첫차 고민하는 분",
+      "차 바꾸려는 분",
+      "견적 받기 전인 분"
+    ],
+    "model": [
+      "그랜저", "싼타페", "아반떼", "팰리세이드", "투싼", "코나", "아이오닉", "제네시스"
+    ],
+    "number": ["3", "5", "7", "10"],
+    "percent": ["1", "5", "10"],
+    "time": ["계약 전", "출고 전", "방문 전", "상담 전"],
+    "benefit": [
+      "수백만 원 아끼는 법",
+      "후회 없이 사는 법",
+      "최저가로 받는 법",
+      "옵션 똑똑하게 고르는 법"
+    ],
+    "feeling": [
+      "진짜 솔직 후기",
+      "타보고 느낀 점",
+      "딜러만 아는 사실",
+      "카탈로그엔 없는 이야기"
+    ]
+  },
+
+  "patterns": [
+    {
+      "id": "number",
+      "$comment": "숫자형 (작은 목표 10가지)",
+      "eyebrow": { "text": "{persona}", "accent": false },
+      "headline": ["{audience}이 꼭 봐야 할", "{model} 포인트 {number}가지"],
+      "subline": ["{time} 꼭 확인하세요", "{benefit}"]
+    },
+    {
+      "id": "rank",
+      "$comment": "비교/상위형 (상위 10%가 조용히)",
+      "eyebrow": { "text": "{persona}", "accent": false },
+      "headline": ["상위 {percent}%만 아는", "{model} 구매 노하우"],
+      "subline": ["{benefit}", "딜러가 직접 알려드립니다"]
+    },
+    {
+      "id": "time",
+      "$comment": "시간형 (퇴근 후 갓생)",
+      "eyebrow": { "text": "{time}, 이건 꼭", "accent": true },
+      "headline": ["{model} 계약 전", "반드시 보는 체크리스트"],
+      "subline": ["놓치면 손해 보는 포인트", "{benefit}"]
+    },
+    {
+      "id": "negation",
+      "$comment": "부정형 (거창하지 않아도)",
+      "eyebrow": { "text": "발품 팔지 않아도", "accent": true },
+      "headline": ["{model}", "{benefit}"],
+      "subline": ["{persona}가 정리한", "2026년형 구매 가이드"]
+    },
+    {
+      "id": "review",
+      "$comment": "후기/솔직형",
+      "eyebrow": { "text": "{persona}", "accent": false },
+      "headline": ["{model}", "{feeling}"],
+      "subline": ["광고 아닌 진짜 이야기", "구매 고민이라면 필수"]
+    },
+    {
+      "id": "question",
+      "$comment": "질문형",
+      "eyebrow": { "text": "{audience} 주목", "accent": true },
+      "headline": ["{model}, 지금 사도", "괜찮을까요?"],
+      "subline": ["{time} 꼭 따져봐야 할 것", "{benefit}"]
+    }
+  ]
+}

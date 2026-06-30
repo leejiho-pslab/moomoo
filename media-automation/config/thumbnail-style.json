@@ -1,0 +1,44 @@
+{
+  "$comment": "썸네일 '고정 틀'. 레퍼런스 4장에서 뽑은 공통 스타일을 토큰으로 박제. 색/크기만 여기서 바꾸면 전체 톤이 한번에 바뀐다.",
+  "fontFamily": "Noto Sans CJK KR, NanumSquare, sans-serif",
+  "colors": {
+    "headline": "#FFFFFF",
+    "eyebrow": "#FFFFFF",
+    "accent": "#FFD60A",
+    "subline": "#E9E9E9",
+    "badgeBg": "#FFFFFF",
+    "badgeText": "#111111"
+  },
+  "platforms": {
+    "instagram": {
+      "$comment": "인스타 릴스 커버 9:16",
+      "width": 1080,
+      "height": 1920,
+      "layout": "bottom",
+      "padding": 72,
+      "badge": { "top": 96, "left": 72, "fontSize": 40 },
+      "eyebrowSize": 48,
+      "headlineSize": 118,
+      "headlineLineHeight": 1.14,
+      "sublineSize": 40,
+      "sublineLineHeight": 1.42,
+      "blockBottom": 150,
+      "scrim": "linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.5) 34%, rgba(0,0,0,0) 62%)"
+    },
+    "youtube": {
+      "$comment": "유튜브 썸네일 16:9 — 인스타와 다른 레이아웃(좌측 정렬, 가로형)",
+      "width": 1280,
+      "height": 720,
+      "layout": "left",
+      "padding": 72,
+      "badge": { "top": 56, "left": 64, "fontSize": 30 },
+      "eyebrowSize": 38,
+      "headlineSize": 92,
+      "headlineLineHeight": 1.1,
+      "sublineSize": 32,
+      "sublineLineHeight": 1.4,
+      "maxWidthPct": 66,
+      "scrim": "linear-gradient(to right, rgba(0,0,0,0.86) 0%, rgba(0,0,0,0.52) 46%, rgba(0,0,0,0) 78%)"
+    }
+  }
+}
