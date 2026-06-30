@@ -5,7 +5,8 @@
 
 import { readFileSync, existsSync, readdirSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+import { argv } from 'node:process';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
@@ -124,14 +125,10 @@ document.getElementById('mask').onclick=e=>{if(e.target.id==='mask')closeModal()
 renderTabs();renderStats();renderGrid();
 `;
 
-const html = `<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>${data.brand} 콘텐츠 관제실 · 블로그</title>
-<style>
- *{margin:0;padding:0;box-sizing:border-box;font-family:'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif}
- body{background:#0a0e17;color:#e8ecf6;padding:28px 20px 80px}
- .wrap{max-width:1180px;margin:0 auto}
- .hd h1{font-size:26px;font-weight:900;letter-spacing:-1px}.hd p{color:#8a98b8;font-size:14px;margin-top:6px}
- .tabs{display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid #1e2740;margin:22px 0 24px}
+// ===== 메인 대시보드에 '블로그' 시트로 합치기 위한 내보내기 =====
+// (전역 *, body, .wrap, .hd 는 통합 대시보드가 정의하므로 제외)
+export const BLOG_CSS = `
+ .tabs{display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid #1e2740;margin:4px 0 24px}
  .tab{background:none;border:none;color:#8a98b8;font-size:15px;font-weight:700;padding:12px 16px;cursor:pointer;border-bottom:2px solid transparent}
  .tab.on{color:#fff;border-bottom-color:#3b82f6}
  .panel{background:#121a2e;border:1px solid #1e2740;border-radius:16px;padding:22px;margin-bottom:18px}
@@ -178,11 +175,10 @@ const html = `<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><meta n
  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#22c55e;color:#04210f;font-weight:800;padding:10px 18px;border-radius:10px;opacity:0;transition:opacity .2s;z-index:20}
  .toast.on{opacity:1}
  @media(max-width:900px){.cards5{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:repeat(2,1fr)}}
- @media(max-width:560px){.grid{grid-template-columns:1fr}}
-</style></head><body>
-<div class="wrap">
- <div class="hd"><h1>🛠️ ${data.brand} 콘텐츠 관제실 · 블로그</h1>
- <p>채널별 현황 · 발행/대기 · 기획안 · 키워드 지수 · 포스팅 클릭 시 본문·다운로드·수정요청</p></div>
+ @media(max-width:560px){.grid{grid-template-columns:1fr}}`;
+
+// 블로그 시트 본문 (#sheet-blog 내부). 모달/토스트는 본문 레벨(BLOG_OVERLAY)로 분리.
+export const BLOG_SHEET_HTML = `
  <div class="tabs" id="tabs"></div>
  <div class="panel"><h2>📋 기획안 <a class="btn" href="mailto:${data.email}?subject=${encodeURIComponent('[기획안 피드백] 블로그 주간 기획')}">✏️ 기획안 피드백</a></h2>
    <div class="chips">${data.keywords.map((k) => `<span>#${k.kw.replace(/\s/g, '')}</span>`).join('')}</div>
@@ -197,15 +193,22 @@ const html = `<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><meta n
  <div class="sec-title">🕐 발행 대기 콘텐츠 (<span id="cnt">0</span>)</div>
  <div class="grid" id="grid"></div>
  <div class="sec-title">✅ 발행된 콘텐츠 (0)</div>
- <div class="panel"><div class="empty">아직 발행된 콘텐츠가 없습니다. (게시 후 채널 연동 시 자동 표시)</div></div>
-</div>
-<div class="mask" id="mask"><div class="modal" id="modal"></div></div>
-<div class="toast" id="toast"></div>
-<script>${clientJs}</script></body></html>`;
+ <div class="panel"><div class="empty">아직 발행된 콘텐츠가 없습니다. (게시 후 채널 연동 시 자동 표시)</div></div>`;
 
-mkdirSync(OUT, { recursive: true });
-writeFileSync(join(OUT, 'blog-dashboard.html'), html);
-const pub = join(ROOT, '..', '..', 'public', 'blog');
-mkdirSync(pub, { recursive: true });
-writeFileSync(join(pub, 'index.html'), html);
-console.log(`✅ 블로그 관제실 → public/blog/index.html (포스트 ${posts.length}개, 원고완성 ${posts.filter((p) => p.has).length}개)`);
+export const BLOG_OVERLAY = `<div class="mask" id="mask"><div class="modal" id="modal"></div></div><div class="toast" id="toast"></div>`;
+export const BLOG_CLIENT_JS = clientJs;
+export const blogStats = { posts: posts.length, done: posts.filter((p) => p.has).length };
+
+// ===== 단독 실행 시: 통합 대시보드로 보내는 리다이렉트만 생성 (콘텐츠는 /dashboard/ 로 일원화) =====
+if (import.meta.url === pathToFileURL(argv[1] || '').href) {
+  const redirect = `<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta http-equiv="refresh" content="0; url=../dashboard/">
+<title>블로그 관제실 이동</title></head>
+<body style="background:#0a0e17;color:#e8ecf6;font-family:sans-serif;text-align:center;padding:80px">
+블로그 관제실은 통합 대시보드로 합쳐졌어요. 잠시 후 이동합니다…<br><br>
+<a href="../dashboard/" style="color:#6ea8ff">→ 통합 대시보드 열기</a></body></html>`;
+  const pub = join(ROOT, '..', '..', 'public', 'blog');
+  mkdirSync(pub, { recursive: true });
+  writeFileSync(join(pub, 'index.html'), redirect);
+  console.log(`✅ /blog/ → /dashboard/ 리다이렉트 생성 (블로그는 통합 대시보드 시트로 이동, 포스트 ${posts.length}개)`);
+}
