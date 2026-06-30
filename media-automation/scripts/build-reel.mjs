@@ -38,9 +38,9 @@ const PROFILES = {
       { name: 'card',  card: true, t: 3.5 },
     ],
     captions: [
-      { seg: 'intro', at: 0.3, dur: 4, style: 'topPill', text: '6월 30일 (월) 👋' },
-      { seg: 'intro', at: 5,   dur: 5, style: 'bottomBig', text: '오늘도 인사드립니다', accent: '인사' },
-      { seg: 'intro', at: 11,  dur: 5, style: 'sideBar', text: '대전·세종·충청\n전국 출고 가능' },
+      { seg: 'intro', at: 0,   dur: 3, style: 'thumbHook', pos: 'center', text: '오늘도\n인사드립니다' },
+      { seg: 'intro', at: 3.5, dur: 3.5, style: 'topPill', text: '6월 30일 (월) 👋' },
+      { seg: 'intro', at: 8,   dur: 6, style: 'sideBar', text: '대전·세종·충청\n전국 출고 가능' },
       { seg: 'mid',   at: 0.5, dur: 5, style: 'centerPop', text: '오늘도 달립니다 🚗💨' },
       { seg: 'mid',   at: 7,   dur: 4, style: 'lowerThird', text: '안전운행 최우선 🛣️' },
       { seg: 'end',   at: 0.5, dur: 5, style: 'topPill', text: '감사합니다 🙏' },
@@ -56,8 +56,8 @@ const PROFILES = {
       { name: 'card',  card: true, t: 3 },
     ],
     captions: [
-      { seg: 'intro', at: 0.2, dur: 3.5, style: 'bottomBig', text: '오늘도 인사드립니다 👋', accent: '인사' },
-      { seg: 'intro', at: 4,   dur: 3,   style: 'topPill', text: '대전 현대·제네시스' },
+      { seg: 'intro', at: 0,   dur: 3,   style: 'thumbHook', pos: 'bottom', text: '오늘도\n인사드립니다' },
+      { seg: 'intro', at: 3.5, dur: 3,   style: 'topPill', text: '대전 현대·제네시스' },
       { seg: 'mid',   at: 0.3, dur: 4,   style: 'centerPop', text: '오늘도 달립니다 🚗💨' },
       { seg: 'mid',   at: 5,   dur: 2,   style: 'lowerThird', text: '🔥 출고 상담 환영' },
       { seg: 'end',   at: 0.3, dur: 4,   style: 'bottomBig', text: '견적·상담 환영 🙌', accent: '환영' },
@@ -70,7 +70,7 @@ if (!prof) { console.error('알 수 없는 채널:', channel); process.exit(1); 
 
 // ---- 자막 스타일(HTML) ------------------------------------------------
 const FONT = "'Pretendard','Noto Color Emoji',sans-serif";
-function captionHtml(style, text, accent) {
+function captionHtml(style, text, accent, pos) {
   const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/\n/g, '<br>');
   let html = esc(text);
   if (accent) html = html.replace(accent, `<span style="color:#FFD60A">${accent}</span>`);
@@ -82,9 +82,21 @@ function captionHtml(style, text, accent) {
       font-weight:600;font-size:58px;letter-spacing:-1.5px;line-height:1.25}
     .big{color:#fff;font-weight:800;font-size:84px;letter-spacing:-3px;line-height:1.18;
       text-shadow:0 4px 22px rgba(0,0,0,.6);text-align:center}
-    .row{position:absolute;left:0;right:0;display:flex;justify-content:center;padding:0 56px}`;
+    .row{position:absolute;left:0;right:0;display:flex;justify-content:center;padding:0 56px}
+    .badge{position:absolute;top:96px;left:84px;background:#14246B;color:#fff;font-weight:700;
+      font-size:40px;border-radius:999px;padding:14px 28px;letter-spacing:-1px}
+    .eyebrow{font-weight:600;font-size:44px;color:#fff;opacity:.95;margin-bottom:14px;letter-spacing:-1px;text-shadow:0 3px 14px rgba(0,0,0,.6)}
+    .headline{font-weight:800;font-size:108px;color:#fff;letter-spacing:-3px;line-height:1.14;text-shadow:0 4px 22px rgba(0,0,0,.6)}`;
   let body = '';
-  if (style === 'topPill') body = `<div class="row" style="top:130px"><div class="pill">${html}</div></div>`;
+  if (style === 'thumbHook') {
+    // 썸네일과 동일한 문구(배지+소제목+제목) — 채널 썸네일 위치에 맞춤
+    const block = `<div style="text-align:left"><div class="eyebrow">현대·제네시스 대전선화점 카마스터</div><div class="headline">${html}</div></div>`;
+    const place = pos === 'bottom'
+      ? `<div class="row" style="bottom:300px;justify-content:flex-start">${block}</div>`
+      : `<div class="row" style="top:0;bottom:0;align-items:center;justify-content:flex-start">${block}</div>`;
+    body = `<div class="badge">현대·제네시스 김무겸</div>${place}`;
+  }
+  else if (style === 'topPill') body = `<div class="row" style="top:130px"><div class="pill">${html}</div></div>`;
   else if (style === 'bottomBig') body = `<div class="row" style="bottom:360px"><div class="big">${html}</div></div>`;
   else if (style === 'centerPop') body = `<div class="row" style="top:0;bottom:0;align-items:center"><div class="big" style="font-size:96px">${html}</div></div>`;
   else if (style === 'lowerThird') body = `<div class="row" style="bottom:420px;justify-content:flex-start"><div class="pill" style="font-size:46px">${html}</div></div>`;
@@ -97,7 +109,7 @@ const browser = await chromium.launch({ executablePath: CHROME });
 let ci = 0;
 for (const cap of prof.captions) {
   const page = await browser.newPage({ viewport: { width: W, height: H }, deviceScaleFactor: 1 });
-  await page.setContent(captionHtml(cap.style, cap.text, cap.accent), { waitUntil: 'load' });
+  await page.setContent(captionHtml(cap.style, cap.text, cap.accent, cap.pos), { waitUntil: 'load' });
   await page.evaluate(() => document.fonts.ready); await page.waitForTimeout(80);
   cap.png = join(TMP, `cap_${ci++}.png`);
   await page.screenshot({ path: cap.png, omitBackground: true });
