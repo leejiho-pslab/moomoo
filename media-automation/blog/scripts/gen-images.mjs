@@ -15,7 +15,8 @@ import { getWriteDrive, getReadDrive, hasOAuth, downloadFile } from '../../scrip
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
-const CHROME = process.env.CHROME_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
+const CHROME_ENV = process.env.CHROME_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
+const CHROME = existsSync(CHROME_ENV) ? CHROME_ENV : undefined; // 없으면 playwright 기본 브라우저 사용(CI)
 const readJson = (p, d) => (existsSync(p) ? JSON.parse(readFileSync(p, 'utf8')) : d);
 
 const cfg = readJson(join(ROOT, 'config', 'blog-config.json'), {});
@@ -191,7 +192,7 @@ function embedHtml(raw, id, imgs) {
 }
 
 const files = existsSync(outPosts) ? readdirSync(outPosts).filter((f) => /\.(md|html)$/.test(f)) : [];
-const browser = await chromium.launch({ executablePath: CHROME });
+const browser = await chromium.launch({ ...(CHROME ? { executablePath: CHROME } : {}), args: ['--no-sandbox'] });
 let done = 0;
 // 공용 명함 이미지 1장 준비
 const cardSrc = join(ROOT, '..', 'assets', 'brand', 'business-card.jpg');
