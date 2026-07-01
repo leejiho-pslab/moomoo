@@ -12,7 +12,8 @@ import { BLOG_CSS, BLOG_SHEET_HTML, BLOG_OVERLAY, BLOG_CLIENT_JS, blogStats } fr
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
-const CHROME = process.env.CHROME_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
+const CHROME_ENV = process.env.CHROME_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
+const CHROME = existsSync(CHROME_ENV) ? CHROME_ENV : undefined;
 const out = join(ROOT, 'output');
 mkdirSync(out, { recursive: true });
 
@@ -207,7 +208,7 @@ writeFileSync(join(blogDir, 'index.html'), `<!DOCTYPE html><html lang="ko"><head
 블로그 관제실은 통합 대시보드로 합쳐졌어요. 잠시 후 이동합니다…<br><br>
 <a href="../dashboard/" style="color:#6ea8ff">→ 통합 대시보드 열기</a></body></html>`);
 
-const browser = await chromium.launch({ executablePath: CHROME });
+const browser = await chromium.launch({ ...(CHROME ? { executablePath: CHROME } : {}), args: ['--no-sandbox'] });
 const page = await browser.newPage({ viewport: { width: 1240, height: 1400 }, deviceScaleFactor: 1 });
 await page.goto(pathToFileURL(htmlPath).href, { waitUntil: 'load' });
 await page.evaluate(() => document.fonts.ready);
