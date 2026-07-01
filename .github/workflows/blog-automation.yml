@@ -45,8 +45,13 @@ jobs:
           ANTHROPIC_MODEL: ${{ vars.ANTHROPIC_MODEL }}
         run: node blog/scripts/write-post.mjs
 
-      - name: 이미지 생성·삽입 (본문 이미지 3+ · 명함 · 카카오)
+      - name: 이미지 생성·삽입 (본문 이미지 3+ · 명함 · 카카오 · 차량 드라이브 연동)
         if: github.event.schedule == '30 21 * * *' || github.event.inputs.task == 'write' || github.event.inputs.task == 'auto'
+        env:
+          GDRIVE_OAUTH_CLIENT_ID: ${{ secrets.GDRIVE_OAUTH_CLIENT_ID }}
+          GDRIVE_OAUTH_CLIENT_SECRET: ${{ secrets.GDRIVE_OAUTH_CLIENT_SECRET }}
+          GDRIVE_OAUTH_REFRESH_TOKEN: ${{ secrets.GDRIVE_OAUTH_REFRESH_TOKEN }}
+          GDRIVE_SA_KEY: ${{ secrets.GDRIVE_SA_KEY }}
         run: node blog/scripts/gen-images.mjs
 
       - name: 드라이브 업로드 (블로그 원고)
