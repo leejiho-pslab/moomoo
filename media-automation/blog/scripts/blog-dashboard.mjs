@@ -122,8 +122,9 @@ function openModal(i){
   const body=p.has?'<div class="doc">'+p.bodyHtml+'</div>'
     :'<div class="doc"><p style="color:#8a98b8">아직 원고가 생성되지 않았어요. (매일 자동 생성 예정) 아래는 기획 구성입니다.</p><ul class="outline">'+p.outline.map(o=>'<li>'+esc(o)+'</li>').join('')+'</ul></div>';
   const acts=[];
-  if(p.has)acts.push('<button class="btn primary" id="copyBtn">📋 본문 복사</button>');
-  if(p.has)acts.push('<button class="btn" id="dlBtn">⬇️ 원고 다운로드</button>');
+  if(p.has)acts.push('<button class="btn primary" id="wordBtn">📄 워드로 저장</button>');
+  if(p.has)acts.push('<button class="btn" id="copyBtn">📋 서식 복사</button>');
+  if(p.has)acts.push('<button class="btn" id="dlBtn">⬇️ 원문 파일</button>');
   if(driveFolder)acts.push('<a class="btn" href="'+driveFolder+'" target="_blank">📂 드라이브 폴더</a>');
   acts.push('<a class="btn" id="fbBtn">✏️ 수정요청</a>');
   document.getElementById('modal').innerHTML='<div class="mh"><div><div class="mt">'+esc(p.title)+'</div>'
@@ -132,8 +133,20 @@ function openModal(i){
   const fb=document.getElementById('fbBtn');
   fb.href='mailto:'+DATA.email+'?subject='+encodeURIComponent('[수정요청] '+p.title)+'&body='+encodeURIComponent('수정 요청 사항:\\n\\n(여기에 적어주세요)\\n\\n— '+p.kdate+' '+p.channel);
   if(p.has){
-    document.getElementById('copyBtn').onclick=()=>{navigator.clipboard.writeText(p.plain);toast('본문을 복사했어요');};
-    document.getElementById('dlBtn').onclick=()=>{const ext=p.channelKey==='naver'?'md':'html';const blob=new Blob([p.raw],{type:'text/plain;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=p.id+'.'+ext;a.click();toast('원고를 다운로드했어요');};
+    var cleanHtml=function(){var c=document.getElementById('modal').querySelector('.doc').cloneNode(true);var s=c.querySelectorAll('script');for(var i=0;i<s.length;i++)s[i].remove();return c.innerHTML;};
+    document.getElementById('wordBtn').onclick=function(){
+      var html='<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>'+esc(p.title)+'</title><style>body{font-family:\\'맑은 고딕\\',Malgun Gothic,sans-serif;font-size:11pt;line-height:1.6}img{max-width:520px}table{border-collapse:collapse}td,th{border:1px solid #999;padding:5px}h1{font-size:18pt}h2{font-size:15pt}h3{font-size:13pt}</style></head><body>'+cleanHtml()+'</body></html>';
+      var blob=new Blob(['\\ufeff'+html],{type:'application/msword'});
+      var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=p.id+'.doc';a.click();toast('워드 파일로 저장했어요');
+    };
+    document.getElementById('copyBtn').onclick=function(){
+      try{
+        var hb=new Blob([cleanHtml()],{type:'text/html'});var tb=new Blob([p.plain],{type:'text/plain'});
+        navigator.clipboard.write([new ClipboardItem({'text/html':hb,'text/plain':tb})]);
+        toast('서식 그대로 복사했어요 · 워드/네이버에 붙여넣기');
+      }catch(e){navigator.clipboard.writeText(p.plain);toast('본문을 복사했어요');}
+    };
+    document.getElementById('dlBtn').onclick=function(){var ext=p.channelKey==='naver'?'md':'html';var blob=new Blob([p.raw],{type:'text/plain;charset=utf-8'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=p.id+'.'+ext;a.click();toast('원문 파일을 다운로드했어요');};
   }
   document.getElementById('mask').classList.add('on');
 }
