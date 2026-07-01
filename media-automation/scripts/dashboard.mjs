@@ -8,6 +8,7 @@ import { dirname, join, extname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { execFileSync } from 'node:child_process';
 import { chromium } from 'playwright-core';
+import { BLOG_CSS, BLOG_SHEET_HTML, BLOG_OVERLAY, BLOG_CLIENT_JS, blogStats } from '../blog/scripts/blog-dashboard.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
@@ -61,77 +62,48 @@ const modules = [
 const badge = { done: ['●', '#16a34a', '작동'], wait: ['◐', '#f59e0b', '대기'], todo: ['○', '#94a3b8', '예정'] };
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
 
-const html = `<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><style>
-  *{margin:0;padding:0;box-sizing:border-box;font-family:'Pretendard','Noto Sans CJK KR',sans-serif}
-  body{background:#0b1020;color:#e8ecf6;width:1240px;padding:40px}
-  .head{display:flex;align-items:center;gap:18px;margin-bottom:10px}
-  .head img{width:64px;height:64px;border-radius:50%;object-fit:cover;object-position:50% 30%;border:2px solid #2a3a6b}
-  .head h1{font-size:30px;font-weight:900;letter-spacing:-1px}.head p{color:#9fb0d6;margin-top:4px;font-size:15px}
-  .upd{color:#6b7aa3;font-size:13px;margin-bottom:24px}
-  .grid{display:grid;gap:18px}.cards{grid-template-columns:repeat(4,1fr)}
-  .card{background:#141b33;border:1px solid #243056;border-radius:16px;padding:20px}
-  .card .nm{font-size:18px;font-weight:800}.card .sb{color:#9fb0d6;font-size:13px;margin-top:6px;line-height:1.4;min-height:36px}
-  .st{display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-size:13px;font-weight:700;padding:4px 10px;border-radius:999px;background:#0b1020}
-  h2{font-size:20px;font-weight:800;margin:34px 0 14px;display:flex;align-items:center;gap:10px}
-  h2 .tag{font-size:12px;color:#9fb0d6;font-weight:600}
-  .panel{background:#141b33;border:1px solid #243056;border-radius:16px;padding:22px}
-  .vid{margin-bottom:16px}.vid .lbl{font-size:15px;font-weight:800;margin-bottom:10px;display:flex;justify-content:space-between}
-  .vid .lbl span{color:#9fb0d6;font-weight:600}
-  .vid img{width:100%;border-radius:12px;border:1px solid #243056;display:block}
-  .two{grid-template-columns:1fr 1fr}
-  .thumbrow{display:flex;gap:14px}.thumbrow .col{flex:1;text-align:center}
-  .thumbrow img{height:300px;border-radius:10px;border:1px solid #243056}
-  .kv{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px dashed #243056;font-size:14px}
-  .kv:last-child{border-bottom:none}.kv b{color:#fff}.muted{color:#9fb0d6}
-  .pill{display:inline-block;background:#1c2747;color:#cdd9f5;border-radius:8px;padding:3px 9px;margin:3px 4px 0 0;font-size:12px}
-  .foot{margin-top:30px;color:#6b7aa3;font-size:12px;text-align:center}
-</style></head><body>
-  <div class="head">
-    ${profile ? `<img src="${profile}">` : ''}
-    <div><h1>김무겸 미디어 자동화 대시보드</h1>
-    <p>현대·제네시스 대전선화대리점 카마스터 · @hyundai_moomoo</p></div>
-  </div>
-  <div class="upd">상태: 영상 자동화 가동 중 (유튜브·인스타 채널별 편집 → 구글드라이브 자동저장)</div>
-
-  <div class="grid cards">
-    ${modules.map((m) => { const b = badge[m.state]; return `<div class="card"><div class="nm">${esc(m.name)}</div><div class="sb">${esc(m.sub)}</div><div class="st" style="color:${b[1]}">${b[0]} ${b[2]}</div></div>`; }).join('')}
+// 운영 현황(시트1) 본문
+const opsHtml = `
+  <div class="opcards">
+    ${modules.map((m) => { const b = badge[m.state]; return `<div class="opcard"><div class="nm">${esc(m.name)}</div><div class="sb">${esc(m.sub)}</div><div class="ost" style="color:${b[1]}">${b[0]} ${b[2]}</div></div>`; }).join('')}
   </div>
 
-  <h2>📥 다운로드 (구글드라이브) <span class="tag">받아서 각 채널에 업로드</span></h2>
-  <div class="grid two">
-    <div class="panel"><h3 style="font-size:16px;font-weight:800;margin-bottom:12px">🎬 영상 완성본 ${links.video?.latestName ? `· ${esc(links.video.latestName)}` : ''}</h3>
-      ${links.video?.folder ? `<a href="${links.video.folder}" target="_blank" style="display:inline-block;background:#14246B;color:#fff;text-decoration:none;font-weight:700;font-size:14px;padding:10px 18px;border-radius:10px;margin-bottom:12px">📂 영상 완성본 폴더 열기</a>` : '<div class="muted">아직 없음</div>'}
+  <div class="sec-title">📥 다운로드 (구글드라이브) <span class="subtag">받아서 각 채널에 업로드</span></div>
+  <div class="optwo">
+    <div class="panel"><h2>🎬 영상 완성본 ${links.video?.latestName ? `<span class="subtag">· ${esc(links.video.latestName)}</span>` : ''}</h2>
+      ${links.video?.folder ? `<a class="btn primary" href="${links.video.folder}" target="_blank">📂 영상 완성본 폴더 열기</a>` : '<div class="muted">아직 없음</div>'}
       ${(links.video?.items || []).map((f) => `<div class="kv"><a href="${f.link}" target="_blank" style="color:#cfe0ff;text-decoration:none;font-size:13px">⬇️ ${esc(f.name)}</a></div>`).join('')}
     </div>
-    <div class="panel"><h3 style="font-size:16px;font-weight:800;margin-bottom:12px">✍️ 블로그 원고 ${links.blog?.latestName ? `· ${esc(links.blog.latestName)}` : ''}</h3>
-      ${links.blog?.folder ? `<a href="${links.blog.folder}" target="_blank" style="display:inline-block;background:#14246B;color:#fff;text-decoration:none;font-weight:700;font-size:14px;padding:10px 18px;border-radius:10px;margin-bottom:12px">📂 블로그 원고 폴더 열기</a>` : '<div class="muted">아직 없음</div>'}
+    <div class="panel"><h2>✍️ 블로그 원고 ${links.blog?.latestName ? `<span class="subtag">· ${esc(links.blog.latestName)}</span>` : ''}</h2>
+      ${links.blog?.folder ? `<a class="btn primary" href="${links.blog.folder}" target="_blank">📂 블로그 원고 폴더 열기</a>` : '<div class="muted">원고는 「블로그 관제실」 시트에서 바로 다운로드</div>'}
       ${(links.blog?.items || []).map((f) => `<div class="kv"><a href="${f.link}" target="_blank" style="color:#cfe0ff;text-decoration:none;font-size:13px">⬇️ ${esc(f.name)}</a></div>`).join('')}
+      <div style="margin-top:14px"><button class="btn" onclick="showSheet('blog')">🗂️ 블로그 관제실 시트 열기 →</button></div>
     </div>
   </div>
 
-  <h2>🎬 채널별 영상 <span class="tag">같은 원본 → 채널에 맞게 다른 편집점·자막</span></h2>
+  <div class="sec-title">🎬 채널별 영상 <span class="subtag">같은 원본 → 채널에 맞게 다른 편집점·자막</span></div>
   <div class="panel">
     <div class="vid"><div class="lbl">유튜브 숏츠 <span>풀버전 · ${ytDur ?? '–'}초 · 차분한 빌드업</span></div>${ytStrip ? `<img src="${ytStrip}">` : '<div class="muted">미리보기 없음</div>'}</div>
     <div class="vid"><div class="lbl">인스타 릴스 <span>훅 먼저 · ${igDur ?? '–'}초 · 짧고 빠르게</span></div>${igStrip ? `<img src="${igStrip}">` : '<div class="muted">미리보기 없음</div>'}</div>
   </div>
 
-  <h2>🖼️ 썸네일 (유튜브 ≠ 인스타) <span class="tag">시작 3초에 같은 문구가 영상에 이어짐</span></h2>
-  <div class="panel"><div class="thumbrow">
+  <div class="sec-title">🖼️ 썸네일 (유튜브 ≠ 인스타) <span class="subtag">시작 3초에 같은 문구가 영상에 이어짐</span></div>
+  <div class="panel"><div class="opthumb">
     <div class="col"><div class="muted" style="margin-bottom:8px">인스타 (하단 배치)</div>${thumbIG ? `<img src="${thumbIG}">` : ''}</div>
     <div class="col"><div class="muted" style="margin-bottom:8px">유튜브 (중앙 배치)</div>${thumbYT ? `<img src="${thumbYT}">` : ''}</div>
   </div></div>
 
-  <h2>📦 자동화 현황</h2>
-  <div class="grid two">
-    <div class="panel"><h3 style="font-size:16px;font-weight:800;margin-bottom:12px">영상 파이프라인</h3>
+  <div class="sec-title">📦 자동화 현황</div>
+  <div class="optwo">
+    <div class="panel"><h2>영상 파이프라인</h2>
       <div class="kv"><span class="muted">입력</span><b>드라이브 「raw 업로드」 폴더</b></div>
       <div class="kv"><span class="muted">저장</span><b>드라이브 「완성본」/날짜 폴더</b></div>
       <div class="kv"><span class="muted">출력 파일</span><b>채널별 영상 2 + 썸네일 2 = 4개</b></div>
       <div class="kv"><span class="muted">실행</span><b>매일 06:00(KST) + 수동</b></div>
-      <div class="kv"><span class="muted">저장 방식</span><b style="color:${autoOn ? '#16a34a' : '#f59e0b'}">${autoOn ? '구글드라이브 자동저장(연결됨)' : '미설정'}</b></div>
+      <div class="kv"><span class="muted">저장 방식</span><b style="color:${autoOn ? '#46d68a' : '#f0b753'}">${autoOn ? '구글드라이브 자동저장(연결됨)' : '미설정'}</b></div>
       <div class="kv"><span class="muted">처리한 영상</span><b>${processed.length}건</b></div>
     </div>
-    <div class="panel"><h3 style="font-size:16px;font-weight:800;margin-bottom:12px">편집 구성</h3>
+    <div class="panel"><h2>편집 구성</h2>
       <div class="kv"><span class="muted">비율</span><b>${vstyle.width}×${vstyle.height} (9:16)</b></div>
       <div class="kv"><span class="muted">자막 스타일</span><b>표지훅·상단·하단·중앙·세로바</b></div>
       <div class="kv"><span class="muted">중간 비는 구간</span><b>줌 무빙 + 이모지</b></div>
@@ -141,15 +113,67 @@ const html = `<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><style>
     </div>
   </div>
 
-  <h2>🔗 연동</h2>
+  <div class="sec-title">🔗 연동</div>
   <div class="panel">
     <div class="kv"><span class="muted">유튜브</span><b>@hyundai_moomoo</b></div>
     <div class="kv"><span class="muted">인스타그램</span><b>@hyundai_moomoo (홈페이지 연동)</b></div>
     <div class="kv"><span class="muted">카카오 상담</span><b>오픈채팅 연결 (홈페이지 버튼)</b></div>
     <div class="kv"><span class="muted">홈페이지</span><b>leejiho-pslab.github.io/moomoo</b></div>
-  </div>
+  </div>`;
 
-  <div class="foot">미리보기는 최근 생성 결과 기준 · 매 실행 시 자동 갱신됩니다</div>
+const switchJs = `
+function showSheet(s){
+  document.querySelectorAll('.sheet').forEach(el=>el.classList.toggle('on', el.id==='sheet-'+s));
+  document.querySelectorAll('.snav').forEach(b=>b.classList.toggle('on', b.dataset.s===s));
+  window.scrollTo(0,0);
+}
+document.querySelectorAll('.snav').forEach(b=>b.onclick=()=>showSheet(b.dataset.s));
+`;
+
+const html = `<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>김무겸 콘텐츠 관제실</title>
+<style>
+ *{margin:0;padding:0;box-sizing:border-box;font-family:'Pretendard','Apple SD Gothic Neo','Noto Sans CJK KR','Noto Sans KR',sans-serif}
+ body{background:#0a0e17;color:#e8ecf6;padding:28px 20px 80px}
+ .wrap{max-width:1180px;margin:0 auto}
+ .hd{display:flex;align-items:center;gap:16px}
+ .hd img{width:60px;height:60px;border-radius:50%;object-fit:cover;object-position:50% 30%;border:2px solid #2a3a6b}
+ .hd h1{font-size:26px;font-weight:900;letter-spacing:-1px}.hd p{color:#8a98b8;font-size:14px;margin-top:5px}
+ .sheetnav{display:flex;gap:8px;margin:22px 0 24px;flex-wrap:wrap}
+ .snav{background:#121a2e;border:1px solid #1e2740;color:#8a98b8;font-size:15px;font-weight:800;padding:11px 20px;border-radius:12px;cursor:pointer}
+ .snav.on{background:linear-gradient(135deg,#3b82f6,#a855f7);color:#fff;border-color:transparent}
+ .sheet{display:none}.sheet.on{display:block}
+ .subtag{font-size:12px;color:#8a98b8;font-weight:600}
+ .opcards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:6px}
+ .opcard{background:#121a2e;border:1px solid #1e2740;border-radius:14px;padding:18px}
+ .opcard .nm{font-size:17px;font-weight:800}.opcard .sb{color:#8a98b8;font-size:13px;margin-top:6px;line-height:1.4;min-height:34px}
+ .opcard .ost{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-size:13px;font-weight:700;padding:4px 10px;border-radius:999px;background:#0a0e17}
+ .optwo{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+ .kv{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px dashed #1e2740;font-size:14px}
+ .kv:last-child{border-bottom:none}.kv b{color:#fff}.muted{color:#8a98b8}
+ .vid{margin-bottom:14px}.vid .lbl{font-size:15px;font-weight:800;margin-bottom:10px;display:flex;justify-content:space-between}.vid .lbl span{color:#8a98b8;font-weight:600}
+ .vid img{width:100%;border-radius:12px;border:1px solid #1e2740;display:block}
+ .opthumb{display:flex;gap:14px}.opthumb .col{flex:1;text-align:center}.opthumb img{height:300px;border-radius:10px;border:1px solid #1e2740}
+ .pill{display:inline-block;background:#1c2747;color:#cdd9f5;border-radius:8px;padding:3px 9px;margin:3px 4px 0 0;font-size:12px}
+${BLOG_CSS}
+ @media(max-width:900px){.opcards{grid-template-columns:repeat(2,1fr)}.optwo{grid-template-columns:1fr}}
+</style></head><body>
+<div class="wrap">
+ <div class="hd">${profile ? `<img src="${profile}">` : ''}
+  <div><h1>🛠️ 김무겸 콘텐츠 관제실</h1>
+  <p>현대·제네시스 대전선화대리점 카마스터 · @hyundai_moomoo · 영상·썸네일·블로그 한 곳에서</p></div></div>
+
+ <div class="sheetnav">
+  <button class="snav on" data-s="ops">📊 운영 현황</button>
+  <button class="snav" data-s="blog">🗂️ 블로그 관제실</button>
+ </div>
+
+ <section id="sheet-ops" class="sheet on">${opsHtml}</section>
+ <section id="sheet-blog" class="sheet">${BLOG_SHEET_HTML}</section>
+</div>
+${BLOG_OVERLAY}
+<script>${switchJs}
+${BLOG_CLIENT_JS}</script>
 </body></html>`;
 
 const htmlPath = join(out, 'dashboard.html');
@@ -158,11 +182,20 @@ const publishDir = join(ROOT, '..', 'public', 'dashboard');
 mkdirSync(publishDir, { recursive: true });
 writeFileSync(join(publishDir, 'index.html'), html);
 
+// /blog/ 는 통합 대시보드로 리다이렉트 (이전 링크 404 방지)
+const blogDir = join(ROOT, '..', 'public', 'blog');
+mkdirSync(blogDir, { recursive: true });
+writeFileSync(join(blogDir, 'index.html'), `<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta http-equiv="refresh" content="0; url=../dashboard/"><title>블로그 관제실 이동</title></head>
+<body style="background:#0a0e17;color:#e8ecf6;font-family:sans-serif;text-align:center;padding:80px">
+블로그 관제실은 통합 대시보드로 합쳐졌어요. 잠시 후 이동합니다…<br><br>
+<a href="../dashboard/" style="color:#6ea8ff">→ 통합 대시보드 열기</a></body></html>`);
+
 const browser = await chromium.launch({ executablePath: CHROME });
 const page = await browser.newPage({ viewport: { width: 1240, height: 1400 }, deviceScaleFactor: 1 });
 await page.goto(pathToFileURL(htmlPath).href, { waitUntil: 'load' });
 await page.evaluate(() => document.fonts.ready);
-await page.waitForTimeout(150);
+await page.waitForTimeout(200);
 await page.screenshot({ path: join(out, 'dashboard.png'), fullPage: true });
 await browser.close();
-console.log('✅ 대시보드 생성 → output/dashboard.png + public/dashboard/index.html');
+console.log(`✅ 통합 대시보드 생성 → public/dashboard/index.html (운영 + 블로그 ${blogStats.posts}편/완성 ${blogStats.done})`);
