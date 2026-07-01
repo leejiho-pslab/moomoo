@@ -28,6 +28,8 @@ function mdToHtml(md) {
   const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
   const lines = md.split('\n'); let html = ''; let inTable = false; let inUl = false;
   const inline = (s) => esc(s)
+    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img alt="$1" src="$2">')
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
     .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
     .replace(/\[이미지: (.+?)\]/g, '<div class="imgph">🖼️ $1</div>')
     .replace(/(#[가-힣A-Za-z0-9_]+)/g, '<span class="tag2">$1</span>');
@@ -50,6 +52,21 @@ function mdToHtml(md) {
   return html;
 }
 
+// 원고 속 images/<파일> 참조를 data URL 로 바꿔 모달에서 바로 보이게 한다.
+const IMGDIR = join(OUT, 'images');
+function imgDataUrl(file) {
+  const p = join(IMGDIR, file);
+  if (!existsSync(p)) return '';
+  const ext = file.split('.').pop().toLowerCase();
+  const mime = ext === 'png' ? 'image/png' : ext === 'webp' ? 'image/webp' : 'image/jpeg';
+  return `data:${mime};base64,${readFileSync(p).toString('base64')}`;
+}
+function embedImgs(html) {
+  return html.replace(/src=(["'])images\/([^"']+)\1/g, (m, q, file) => {
+    const d = imgDataUrl(file); return d ? `src=${q}${d}${q}` : m;
+  });
+}
+
 const posts = [];
 for (const day of plan.days || []) {
   for (const ch of ['naver', 'google']) {
@@ -57,8 +74,8 @@ for (const day of plan.days || []) {
     const nf = join(OUT, 'posts', `${day.date}_naver.md`);
     const gf = join(OUT, 'posts', `${day.date}_google.html`);
     let bodyHtml = '', plain = '', has = false, raw = '';
-    if (ch === 'naver' && existsSync(nf)) { raw = readFileSync(nf, 'utf8'); bodyHtml = mdToHtml(raw); plain = raw; has = true; }
-    if (ch === 'google' && existsSync(gf)) { raw = readFileSync(gf, 'utf8'); bodyHtml = raw; plain = raw.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim(); has = true; }
+    if (ch === 'naver' && existsSync(nf)) { raw = readFileSync(nf, 'utf8'); bodyHtml = embedImgs(mdToHtml(raw)); plain = raw; has = true; }
+    if (ch === 'google' && existsSync(gf)) { raw = readFileSync(gf, 'utf8'); bodyHtml = embedImgs(raw); plain = raw.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim(); has = true; }
     posts.push({ id: `${day.date}_${ch}`, date: day.date, kdate: day.kdate,
       channel: ch === 'naver' ? '네이버 블로그' : '구글 블로그', channelKey: ch,
       cat: p.queryTypeLabel, title: p.title, keyword: p.targetKeyword, outline: p.outline,
@@ -169,6 +186,10 @@ export const BLOG_CSS = `
  .doc table{width:100%;border-collapse:collapse;margin:12px 0}.doc td,.doc th{border:1px solid #25304d;padding:8px 10px;font-size:14px}
  .doc blockquote{border-left:4px solid #3b82f6;background:#10182b;padding:10px 14px;margin:12px 0;border-radius:6px;color:#cfe0ff}
  .doc .imgph{background:#11203a;border:1px dashed #2b3a63;color:#9fb6e6;padding:14px;border-radius:8px;margin:10px 0;font-size:13px}
+ .doc img{max-width:100%;border-radius:10px;margin:12px 0;display:block}
+ .doc figure{margin:14px 0}.doc figcaption{color:#8a98b8;font-size:12px;margin-top:5px}
+ .doc .bcard img{max-width:420px}
+ .doc .kakao a{display:inline-block;background:#FEE500;color:#191600;font-weight:800;text-decoration:none;padding:11px 18px;border-radius:10px}
  .doc .tag2{color:#6ea8ff}.doc a{color:#6ea8ff}
  .outline li{margin:6px 0;color:#c3cde6}
  .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}

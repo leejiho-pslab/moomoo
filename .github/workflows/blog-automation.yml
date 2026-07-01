@@ -45,6 +45,10 @@ jobs:
           ANTHROPIC_MODEL: ${{ vars.ANTHROPIC_MODEL }}
         run: node blog/scripts/write-post.mjs
 
+      - name: 이미지 생성·삽입 (본문 이미지 3+ · 명함 · 카카오)
+        if: github.event.schedule == '30 21 * * *' || github.event.inputs.task == 'write' || github.event.inputs.task == 'auto'
+        run: node blog/scripts/gen-images.mjs
+
       - name: 드라이브 업로드 (블로그 원고)
         if: always()
         env:
