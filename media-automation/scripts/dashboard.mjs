@@ -62,10 +62,26 @@ const modules = [
 const badge = { done: ['●', '#16a34a', '작동'], wait: ['◐', '#f59e0b', '대기'], todo: ['○', '#94a3b8', '예정'] };
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
 
+// 영상 자동화 폴더 링크 (업로드=원본, 완성본=결과물)
+const uploadFolderUrl = auto.inputFolderId && !String(auto.inputFolderId).startsWith('PUT_') ? `https://drive.google.com/drive/folders/${auto.inputFolderId}` : '';
+const outputFolderUrl = links.video?.folder || (auto.outputFolderId ? `https://drive.google.com/drive/folders/${auto.outputFolderId}` : '');
+
 // 운영 현황(시트1) 본문
 const opsHtml = `
   <div class="opcards">
     ${modules.map((m) => { const b = badge[m.state]; return `<div class="opcard"><div class="nm">${esc(m.name)}</div><div class="sb">${esc(m.sub)}</div><div class="ost" style="color:${b[1]}">${b[0]} ${b[2]}</div></div>`; }).join('')}
+  </div>
+
+  <div class="sec-title">🎬 영상·썸네일 자동화 폴더 <span class="subtag">원본을 올리면 매일 06:00 자동 편집·썸네일 → 완성본 저장</span></div>
+  <div class="optwo">
+    <div class="panel"><h2>📤 원본 업로드 폴더</h2>
+      <div class="muted" style="font-size:13px;margin-bottom:12px;line-height:1.6">촬영한 영상을 <b>여기에 올리면</b> 자동으로 편집됩니다.<br>파일명 예시: <b>0701</b> (날짜) · 여러 개면 0701-1, 0701-2</div>
+      ${uploadFolderUrl ? `<a class="btn primary" href="${uploadFolderUrl}" target="_blank">📂 업로드 폴더 열기</a>` : '<div class="muted">미설정 (automation.json 의 inputFolderId 확인)</div>'}
+    </div>
+    <div class="panel"><h2>📥 완성본 폴더</h2>
+      <div class="muted" style="font-size:13px;margin-bottom:12px;line-height:1.6">결과물이 <b>날짜 폴더</b>로 저장됩니다.<br>채널별 영상 2 + 썸네일 2 = <b>4종</b> (유튜브 숏츠·인스타 릴스)</div>
+      ${outputFolderUrl ? `<a class="btn primary" href="${outputFolderUrl}" target="_blank">📂 완성본 폴더 열기</a>` : '<div class="muted">첫 자동 실행 후 생성됩니다</div>'}
+    </div>
   </div>
 
   <div class="sec-title">📥 다운로드 (구글드라이브) <span class="subtag">받아서 각 채널에 업로드</span></div>
