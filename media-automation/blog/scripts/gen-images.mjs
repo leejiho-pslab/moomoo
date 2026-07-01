@@ -11,6 +11,7 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync, copyFi
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { chromium } from 'playwright-core';
+import { getWriteDrive, getReadDrive, hasOAuth, downloadFile } from '../../scripts/drive.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
@@ -53,17 +54,39 @@ const frame = (inner, bg) => `<!DOCTYPE html><html><head><meta charset="utf-8"><
  .pad{padding:64px 68px;height:100%;display:flex;flex-direction:column}
 </style></head><body>${inner}</body></html>`;
 
+// 차량 이미지가 로컬에 없으면 사장님 드라이브 폴더(차종별)에서 가져와 캐시한다.
+async function ensureCarImage(model) {
+  const m = carCfg.models?.[model];
+  if (!m) return;
+  const dest = join(ROOT, 'assets', 'cars', m.file);
+  if (existsSync(dest)) return;          // 이미 있음
+  if (!m.driveFolderId) return;          // 소스 폴더 지정 없음
+  let drive;
+  try { drive = hasOAuth() ? getWriteDrive() : getReadDrive(); } catch { return; } // 인증정보 없으면 자리카드로
+  try {
+    const res = await drive.files.list({
+      q: `'${m.driveFolderId}' in parents and mimeType contains 'image/' and trashed = false`,
+      fields: 'files(id, name, mimeType)', pageSize: 10,
+      supportsAllDrives: true, includeItemsFromAllDrives: true,
+    });
+    const f = (res.data.files || [])[0];
+    if (!f) return;
+    await downloadFile(drive, f.id, dest);
+    console.log(`  ↳ ${model}: 드라이브에서 차량 이미지 가져옴 (${f.name})`);
+  } catch (e) { console.log(`  ↳ ${model}: 드라이브 이미지 가져오기 실패 — ${e.message}`); }
+}
+
 // 1) 차량(현대 공식) 이미지 카드
 function carHtml(model) {
   const m = carCfg.models?.[model];
   const file = m ? join(ROOT, 'assets', 'cars', m.file) : null;
   if (m && file && existsSync(file)) {
-    return frame(`<div style="position:relative;width:100%;height:100%">
-      <img src="${dataUrl(file)}" style="width:100%;height:100%;object-fit:cover">
-      <div style="position:absolute;left:0;right:0;bottom:0;padding:26px 40px;background:linear-gradient(0deg,rgba(8,16,40,.86),rgba(8,16,40,0));color:#fff">
-        <div style="font-size:34px;font-weight:900;letter-spacing:-1px">${esc(model)}</div>
-        <div style="font-size:17px;color:#cfe0ff;margin-top:4px">${esc(carCfg.brandCaption || STORE)}</div>
-      </div></div>`, '#08102a');
+    return frame(`<div style="position:relative;width:100%;height:100%;background:#fff;display:flex;align-items:center;justify-content:center">
+      <img src="${dataUrl(file)}" style="max-width:88%;max-height:74%;object-fit:contain">
+      <div style="position:absolute;left:0;right:0;bottom:0;padding:22px 40px;background:linear-gradient(0deg,rgba(8,16,40,.9),rgba(8,16,40,0));color:#fff">
+        <div style="font-size:32px;font-weight:900;letter-spacing:-1px">${esc(model)}</div>
+        <div style="font-size:16px;color:#cfe0ff;margin-top:4px">${esc(carCfg.brandCaption || STORE)}</div>
+      </div></div>`, '#ffffff');
   }
   // 파일 없을 때: '공식 이미지 자리' 안내 카드
   const url = m?.url || cfg.hyundai?.homepage || 'hyundai.com';
@@ -187,6 +210,7 @@ for (const f of files) {
     summary: { key: 'summary', alt: `${post.title} 핵심 요약`, cap: '핵심 요약' },
     checklist: { key: 'checklist', alt: `${post.model || post.targetKeyword} 구매 체크리스트`, cap: '구매 전 체크리스트' },
   };
+  await ensureCarImage(post.model);
   await render(browser, carHtml(post.model), join(outImgs, `${id}_car.png`));
   await render(browser, summaryHtml(post), join(outImgs, `${id}_summary.png`));
   await render(browser, checklistHtml(post), join(outImgs, `${id}_checklist.png`));

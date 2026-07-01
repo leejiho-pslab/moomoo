@@ -1,21 +1,18 @@
 {
   "$comment": "차량 이미지 매핑. blog/assets/cars/<file> 에 현대·제네시스 공식 이미지를 넣으면 원고 상단에 자동 삽입됩니다. 파일이 없으면 '공식 이미지 자리' 안내 카드가 대신 들어갑니다(자리·문구 표시).",
-  "sourceNote": "이미지는 현대/제네시스 공식 홈페이지의 모델 이미지를 사용(사장님 보유 권한). 각 url 페이지에서 내려받아 아래 file 이름으로 blog/assets/cars/ 에 저장하세요.",
+  "sourceNote": "사장님 제공 드라이브 폴더(차종별)에서 가져옴. driveRootFolderId 하위의 각 차종 폴더 이미지를 사용.",
+  "driveRootFolderId": "1MdVcqQL1S28K8GQFWxNofBZzwmfrOeN5",
   "brandCaption": "현대·제네시스 대전선화대리점 · 김무겸 카마스터",
   "models": {
-    "그랜저":    { "file": "grandeur.jpg",  "url": "https://www.hyundai.com/kr/ko/vehicles/grandeur",  "alt": "현대 그랜저 — 대전 그랜저 견적·출고 상담" },
-    "싼타페":    { "file": "santafe.jpg",   "url": "https://www.hyundai.com/kr/ko/vehicles/santafe",   "alt": "현대 싼타페 — 패밀리 SUV 할부·출고 상담" },
-    "팰리세이드": { "file": "palisade.jpg",  "url": "https://www.hyundai.com/kr/ko/vehicles/palisade",  "alt": "현대 팰리세이드 — 대형 SUV 견적·리스 상담" },
-    "투싼":      { "file": "tucson.jpg",    "url": "https://www.hyundai.com/kr/ko/vehicles/tucson",    "alt": "현대 투싼 — 도심형 SUV 견적 상담" },
-    "아반떼":    { "file": "avante.jpg",    "url": "https://www.hyundai.com/kr/ko/vehicles/avante",    "alt": "현대 아반떼 — 사회초년생 첫차 견적 상담" },
-    "코나":      { "file": "kona.jpg",      "url": "https://www.hyundai.com/kr/ko/vehicles/kona",      "alt": "현대 코나 — 소형 SUV 견적 상담" },
-    "아이오닉5":  { "file": "ioniq5.jpg",    "url": "https://www.hyundai.com/kr/ko/vehicles/ioniq5",    "alt": "현대 아이오닉5 — 전기차 보조금·출고 상담" },
-    "아이오닉6":  { "file": "ioniq6.jpg",    "url": "https://www.hyundai.com/kr/ko/vehicles/ioniq6",    "alt": "현대 아이오닉6 — 전기 세단 견적 상담" },
-    "캐스퍼":    { "file": "casper.jpg",    "url": "https://www.hyundai.com/kr/ko/vehicles/casper",    "alt": "현대 캐스퍼 — 경형 SUV 견적 상담" },
-    "스타리아":   { "file": "staria.jpg",    "url": "https://www.hyundai.com/kr/ko/vehicles/staria",    "alt": "현대 스타리아 — 다목적·법인차 상담" },
-    "G80":      { "file": "g80.jpg",       "url": "https://www.genesis.com/kr/ko/models/G80.html",    "alt": "제네시스 G80 — 견적·시승 상담" },
-    "GV80":     { "file": "gv80.jpg",      "url": "https://www.genesis.com/kr/ko/models/GV80.html",   "alt": "제네시스 GV80 — 대형 SUV 견적 상담" },
-    "GV70":     { "file": "gv70.jpg",      "url": "https://www.genesis.com/kr/ko/models/GV70.html",   "alt": "제네시스 GV70 — SUV 견적 상담" },
-    "G90":      { "file": "g90.jpg",       "url": "https://www.genesis.com/kr/ko/models/G90.html",    "alt": "제네시스 G90 — 플래그십 세단 상담" }
+    "그랜저":    { "file": "grandeur.png",  "driveFolderId": "1kSb9d36kPb7CREhZPsdLd6X0qKmuuKJ_", "url": "https://www.hyundai.com/kr/ko/vehicles/grandeur",  "alt": "현대 그랜저 — 대전 그랜저 견적·출고 상담" },
+    "싼타페":    { "file": "santafe.png",   "driveFolderId": "1K9P_MX2CVogi1IeAeDqHshVOHVNPn7Oj", "url": "https://www.hyundai.com/kr/ko/vehicles/santafe",   "alt": "현대 싼타페 — 패밀리 SUV 할부·출고 상담" },
+    "팰리세이드": { "file": "palisade.png",  "driveFolderId": "1cdQ7LOQR__qUfvpRGOqMus5-Iw8JU5Q7", "url": "https://www.hyundai.com/kr/ko/vehicles/palisade",  "alt": "현대 팰리세이드 — 대형 SUV 견적·리스 상담" },
+    "투싼":      { "file": "tucson.png",    "driveFolderId": "1W8RgaTimhFyDo_YqiQbKtGZRgkcWc5CE", "url": "https://www.hyundai.com/kr/ko/vehicles/tucson",    "alt": "현대 투싼 — 도심형 SUV 견적 상담" },
+    "아반떼":    { "file": "avante.png",    "driveFolderId": "1kIlSFRd0mu-uvjlQtLUvxD06rD3BlByB", "url": "https://www.hyundai.com/kr/ko/vehicles/avante",    "alt": "현대 아반떼 — 사회초년생 첫차 견적 상담" },
+    "코나":      { "file": "kona.png",      "driveFolderId": "1GN2hA2CZutuHxUVHQPRfpPM5oE3DP3yX", "url": "https://www.hyundai.com/kr/ko/vehicles/kona",      "alt": "현대 코나 — 소형 SUV 견적 상담" },
+    "아이오닉5":  { "file": "ioniq5.png",    "driveFolderId": "1DXLI0-ULwAOHKakmLPq8FT_A8bnUapcb", "url": "https://www.hyundai.com/kr/ko/vehicles/ioniq5",    "alt": "현대 아이오닉5 — 전기차 보조금·출고 상담" },
+    "아이오닉6":  { "file": "ioniq6.png",    "driveFolderId": "1CffAY3FROouRAy7Cu6YKhr1qd9WSR1C0", "url": "https://www.hyundai.com/kr/ko/vehicles/ioniq6",    "alt": "현대 아이오닉6 — 전기 세단 견적 상담" },
+    "스타리아":   { "file": "staria.png",    "driveFolderId": "13sOOp2Etm_x3L6na0F59v_xwZMl8_qsC", "url": "https://www.hyundai.com/kr/ko/vehicles/staria",    "alt": "현대 스타리아 — 다목적·법인차 상담" },
+    "베뉴":      { "file": "venue.png",     "driveFolderId": "1CP7ENcQikWg3EUYLENeGU5A8qHM03tAk", "url": "https://www.hyundai.com/kr/ko/vehicles/venue",     "alt": "현대 베뉴 — 엔트리 SUV 견적 상담" }
   }
 }
