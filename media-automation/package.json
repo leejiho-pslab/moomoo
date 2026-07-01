@@ -12,6 +12,7 @@
     "dash": "node scripts/dashboard.mjs",
     "blog:plan": "node blog/scripts/plan-week.mjs",
     "blog:write": "node blog/scripts/write-post.mjs",
+    "blog:images": "node blog/scripts/gen-images.mjs",
     "blog:upload": "node blog/scripts/upload-blog.mjs"
   },
   "dependencies": {

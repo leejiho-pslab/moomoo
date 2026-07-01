@@ -35,4 +35,15 @@ if (existsSync(google)) targets.push([google, `${date}_구글.html`, 'text/html'
 
 if (!targets.length) { console.log('업로드할 파일이 없습니다.'); process.exit(0); }
 for (const [p, n, m] of targets) { await uploadFile(d, p, n, sub, m); console.log('⬆️', n); }
-console.log(`✅ 드라이브 "블로그 원고 (자동생성)/${date}" 에 ${targets.length}개 업로드`);
+
+// 그날 원고에 삽입된 이미지들도 함께 업로드(다운받아 각 채널에 넣도록)
+const imgDir = join(OUT, 'images');
+const imgs = existsSync(imgDir) ? readdirSync(imgDir).filter((f) => f.startsWith(date) && /\.(png|jpe?g|webp)$/i.test(f)) : [];
+if (imgs.length) {
+  const imgSub = await ensureFolder(d, '이미지', sub);
+  for (const f of imgs) {
+    const mime = /\.png$/i.test(f) ? 'image/png' : /\.webp$/i.test(f) ? 'image/webp' : 'image/jpeg';
+    await uploadFile(d, join(imgDir, f), f, imgSub, mime); console.log('🖼️', f);
+  }
+}
+console.log(`✅ 드라이브 "블로그 원고 (자동생성)/${date}" 에 원고 ${targets.length}개 + 이미지 ${imgs.length}개 업로드`);
