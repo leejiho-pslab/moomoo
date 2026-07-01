@@ -62,8 +62,9 @@ async function ensureCarImage(model) {
   const dest = join(ROOT, 'assets', 'cars', m.file);
   if (existsSync(dest)) return;          // 이미 있음
   if (!m.driveFolderId) return;          // 소스 폴더 지정 없음
+  // 서비스계정(넓은 읽기 권한) 우선 — OAuth 는 drive.file 스코프라 사장님이 직접 올린 폴더를 못 읽음.
   let drive;
-  try { drive = hasOAuth() ? getWriteDrive() : getReadDrive(); } catch { return; } // 인증정보 없으면 자리카드로
+  try { drive = getReadDrive(); } catch { return; } // 인증정보 없으면 자리카드로
   try {
     const res = await drive.files.list({
       q: `'${m.driveFolderId}' in parents and mimeType contains 'image/' and trashed = false`,
