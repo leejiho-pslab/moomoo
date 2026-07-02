@@ -136,10 +136,43 @@ function openModal(i){
     var BS=String.fromCharCode(92);
     var cleanHtml=function(){var c=document.getElementById('modal').querySelector('.doc').cloneNode(true);var s=c.querySelectorAll('script,style');for(var i=0;i<s.length;i++)s[i].remove();return c.innerHTML;};
     var rtfEsc=function(t){var r='';for(var i=0;i<t.length;i++){var ch=t[i];var c=t.charCodeAt(i);if(ch===BS||ch==='{'||ch==='}')r+=BS+ch;else if(c<128)r+=ch;else{var v=c;if(v>32767)v=v-65536;r+=BS+'u'+v+'?';}}return r;};
-    var imgNote=function(el){var alt=(el.getAttribute('alt')||'사진').replace(/\\s+/g,' ').trim();return BS+'par{'+BS+'i '+rtfEsc('🖼 ['+alt+'] — 이미지는 드라이브 「이미지」 폴더에서 넣어주세요')+'}'+BS+'par ';};
-    var rtfWalk=function(node){var s='';for(var i=0;i<node.childNodes.length;i++){var n=node.childNodes[i];if(n.nodeType===3){s+=rtfEsc(n.nodeValue);}else if(n.nodeType===1){var tag=n.tagName.toLowerCase();if(tag==='style'||tag==='script'){}else if(tag==='img'){s+=imgNote(n);}else if(tag==='br'){s+=BS+'line ';}else if(tag==='strong'||tag==='b'){s+='{'+BS+'b '+rtfWalk(n)+'}';}else if(tag==='h1'||tag==='h2'){s+=BS+'par{'+BS+'b'+BS+'fs40 '+rtfWalk(n)+'}'+BS+'par ';}else if(tag==='h3'||tag==='h4'){s+=BS+'par{'+BS+'b'+BS+'fs30 '+rtfWalk(n)+'}'+BS+'par ';}else if(tag==='li'){s+=BS+'bullet '+rtfWalk(n)+BS+'par ';}else if(tag==='p'||tag==='div'||tag==='figure'||tag==='blockquote'||tag==='tr'){s+=rtfWalk(n)+BS+'par ';}else{s+=rtfWalk(n);}}}return s;};
+    var imgNote=function(el){var alt=(el.getAttribute('alt')||'사진').replace(/\\s+/g,' ').trim();return BS+'par{'+BS+'i '+rtfEsc('🖼 ['+alt+'] — 이미지를 불러오지 못했어요. 드라이브 「이미지」 폴더를 확인해주세요')+'}'+BS+'par ';};
+    var imgMap=new Map();
+    var waitImg=function(img){return new Promise(function(res){if(img.complete&&img.naturalWidth){res();}else{img.onload=function(){res();};img.onerror=function(){res();};}});};
+    var buildImgMap=async function(el){
+      var imgs=el.querySelectorAll('img');var map=new Map();
+      for(var i=0;i<imgs.length;i++){var im=imgs[i];await waitImg(im);
+        try{
+          if(im.naturalWidth){
+            var nw=im.naturalWidth,nh=im.naturalHeight;
+            var cv=document.createElement('canvas');cv.width=nw;cv.height=nh;
+            var ctx=cv.getContext('2d');ctx.drawImage(im,0,0,nw,nh);
+            var b64=cv.toDataURL('image/png').split(',')[1];
+            var bin=atob(b64);var hex='';
+            for(var j=0;j<bin.length;j++){var h=bin.charCodeAt(j).toString(16);if(h.length<2)h='0'+h;hex+=h;}
+            map.set(im,{hex:hex,w:nw,h:nh});
+          }
+        }catch(e){}
+      }
+      return map;
+    };
+    var rtfImg=function(el){
+      var r=imgMap.get(el);if(!r)return imgNote(el);
+      var goalW=Math.min(8500,Math.round(r.w/96*1440));var goalH=Math.round(goalW*r.h/r.w);
+      return '{'+BS+'pict'+BS+'pngblip'+BS+'picw'+r.w+BS+'pich'+r.h+BS+'picwgoal'+goalW+BS+'pichgoal'+goalH+' '+r.hex+'}'+BS+'par ';
+    };
+    var rtfWalk=function(node){var s='';for(var i=0;i<node.childNodes.length;i++){var n=node.childNodes[i];if(n.nodeType===3){s+=rtfEsc(n.nodeValue);}else if(n.nodeType===1){var tag=n.tagName.toLowerCase();if(tag==='style'||tag==='script'){}else if(tag==='img'){s+=rtfImg(n);}else if(tag==='br'){s+=BS+'line ';}else if(tag==='strong'||tag==='b'){s+='{'+BS+'b '+rtfWalk(n)+'}';}else if(tag==='h1'||tag==='h2'){s+=BS+'par{'+BS+'b'+BS+'fs40 '+rtfWalk(n)+'}'+BS+'par ';}else if(tag==='h3'||tag==='h4'){s+=BS+'par{'+BS+'b'+BS+'fs30 '+rtfWalk(n)+'}'+BS+'par ';}else if(tag==='li'){s+=BS+'bullet '+rtfWalk(n)+BS+'par ';}else if(tag==='p'||tag==='div'||tag==='figure'||tag==='blockquote'||tag==='tr'){s+=rtfWalk(n)+BS+'par ';}else{s+=rtfWalk(n);}}}return s;};
     var toRtf=function(){var el=document.getElementById('modal').querySelector('.doc');return '{'+BS+'rtf1'+BS+'ansi'+BS+'ansicpg949'+BS+'deff0{'+BS+'fonttbl{'+BS+'f0'+BS+'fnil Malgun Gothic;}}'+BS+'viewkind4'+BS+'uc1'+BS+'f0'+BS+'fs22 '+rtfWalk(el)+'}';};
-    document.getElementById('wordBtn').onclick=function(){var blob=new Blob([toRtf()],{type:'application/rtf'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=p.id+'.rtf';a.click();toast('워드·한글 파일로 저장했어요');};
+    document.getElementById('wordBtn').onclick=async function(){
+      var btn=this;var orig=btn.textContent;btn.textContent='⏳ 이미지 준비 중…';btn.style.pointerEvents='none';
+      try{
+        var docEl=document.getElementById('modal').querySelector('.doc');
+        imgMap=await buildImgMap(docEl);
+        var blob=new Blob([toRtf()],{type:'application/rtf'});
+        var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=p.id+'.rtf';a.click();
+        toast('워드·한글 파일로 저장했어요 (이미지 포함)');
+      }finally{btn.textContent=orig;btn.style.pointerEvents='';}
+    };
     document.getElementById('copyBtn').onclick=function(){try{var hb=new Blob([cleanHtml()],{type:'text/html'});var tb=new Blob([p.plain],{type:'text/plain'});navigator.clipboard.write([new ClipboardItem({'text/html':hb,'text/plain':tb})]);toast('서식 그대로 복사했어요 · 워드/네이버에 붙여넣기');}catch(e){navigator.clipboard.writeText(p.plain);toast('본문을 복사했어요');}};
     document.getElementById('dlBtn').onclick=function(){var ext=p.channelKey==='naver'?'md':'html';var blob=new Blob([p.raw],{type:'text/plain;charset=utf-8'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=p.id+'.'+ext;a.click();toast('원문 파일을 다운로드했어요');};
   }
