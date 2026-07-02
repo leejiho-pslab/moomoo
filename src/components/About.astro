@@ -8,6 +8,11 @@ const titleLines = title.split('\n');
 const profileSrc = images.profile ?? localImage('profile');
 const hasProfilePhoto = Boolean(img(profileSrc));
 const profilePhoto = img(profileSrc) ?? `${import.meta.env.BASE_URL}images/dealer-profile.svg`;
+const banners = {
+  career: img(images.aboutBanners?.career),
+  services: img(images.aboutBanners?.services),
+  process: img(images.aboutBanners?.process),
+};
 ---
 
 <section class="section section--dark" id="about">
@@ -46,6 +51,9 @@ const profilePhoto = img(profileSrc) ?? `${import.meta.env.BASE_URL}images/deale
     </div>
 
     <div class="about__block">
+      {banners?.career && (
+        <div class="about__banner" style={`background-image:url('${banners.career}')`} data-reveal></div>
+      )}
       <div class="about__blockhead" data-reveal>
         <p class="eyebrow">CAREER</p>
         <h3 class="about__blocktitle">경력 &amp; 실적</h3>
@@ -76,6 +84,9 @@ const profilePhoto = img(profileSrc) ?? `${import.meta.env.BASE_URL}images/deale
     </div>
 
     <div class="about__block">
+      {banners?.services && (
+        <div class="about__banner" style={`background-image:url('${banners.services}')`} data-reveal></div>
+      )}
       <div class="about__blockhead" data-reveal>
         <p class="eyebrow">EXPERTISE</p>
         <h3 class="about__blocktitle">전문 분야</h3>
@@ -93,6 +104,9 @@ const profilePhoto = img(profileSrc) ?? `${import.meta.env.BASE_URL}images/deale
     </div>
 
     <div class="about__block">
+      {banners?.process && (
+        <div class="about__banner" style={`background-image:url('${banners.process}')`} data-reveal></div>
+      )}
       <div class="about__blockhead" data-reveal>
         <p class="eyebrow">PROCESS</p>
         <h3 class="about__blocktitle">상담 프로세스</h3>
@@ -170,6 +184,19 @@ const profilePhoto = img(profileSrc) ?? `${import.meta.env.BASE_URL}images/deale
 
   /* ── 블록 공통 헤더 ── */
   .about__block { border-top: 1px solid var(--line-dark); padding-top: clamp(40px, 6vw, 64px); }
+  .about__banner {
+    position: relative;
+    width: 100%; aspect-ratio: 21 / 6; border-radius: var(--radius);
+    background-size: cover; background-position: center;
+    background-color: #10131c;
+    overflow: hidden;
+    border: 1px solid var(--line-dark);
+    margin-bottom: clamp(24px, 4vw, 36px);
+  }
+  .about__banner::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(5, 7, 11, 0.1) 0%, rgba(5, 7, 11, 0.55) 70%, rgba(5, 7, 11, 0.85) 100%);
+  }
   .about__blockhead { margin-bottom: clamp(28px, 4vw, 44px); max-width: 620px; }
   .about__blocktitle { font-size: clamp(1.6rem, 4vw, 2.4rem); margin-top: 12px; }
   .about__blocklead { color: var(--muted-dark); margin: 14px 0 0; font-size: 1rem; }
@@ -283,6 +310,7 @@ const profilePhoto = img(profileSrc) ?? `${import.meta.env.BASE_URL}images/deale
     .services { grid-template-columns: repeat(2, 1fr); }
     .process { grid-template-columns: repeat(2, 1fr); gap: 22px 16px; }
     .career { grid-template-columns: 1fr; }
+    .about__banner { aspect-ratio: 16 / 9; }
   }
   @media (max-width: 760px) {
     .about__intro { grid-template-columns: 1fr; }
