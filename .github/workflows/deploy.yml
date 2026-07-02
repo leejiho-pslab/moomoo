@@ -31,7 +31,8 @@ jobs:
           npm run fetch:images
       - name: Build
         env:
-          SITE_BASE: /moomoo/
+          SITE_URL: https://hyundaimoomoo.co.kr
+          SITE_BASE: /
         run: npm run build
       - uses: actions/upload-pages-artifact@v3
         with:
