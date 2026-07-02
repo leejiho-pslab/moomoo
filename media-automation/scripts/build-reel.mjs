@@ -27,6 +27,8 @@ const outPath = arg('out', join(ROOT, 'output', `reel_${channel}.mp4`));
 const W = 1080, H = 1920, FPS = 30;
 const c1 = join(CLIPS, 'c1.mp4'), c2 = join(CLIPS, 'c2.mp4'), c3 = join(CLIPS, 'c3.mp4');
 const cardPng = join(ROOT, 'output', 'scene_card.png');
+const logosPath = join(ROOT, 'assets', 'brand', 'logos.png');
+const logosB64 = existsSync(logosPath) ? readFileSync(logosPath).toString('base64') : null;
 
 // ---- 채널 프로필 (편집점 + 자막 스케줄) -------------------------------
 const PROFILES = {
@@ -46,21 +48,20 @@ const PROFILES = {
       { seg: 'end',   at: 0.5, dur: 7, style: 'sub', text: '견적·시승·출고 상담 환영합니다 🙌' },
     ],
   },
-  // 인스타 릴스: 짧고 빠르게, 훅 먼저, 자막 큼직
+  // 인스타 릴스: 고정 프레임 동일 적용(짧고 빠르게)
   instagram: {
+    framed: true,
+    frame: { date: '', title: '오늘도 기분좋게<br><span class="hl">인사</span>드립니다 😊' },
     segments: [
       { name: 'intro', src: c1, ss: 2, t: 7, zoom: false },
-      { name: 'mid',   src: c2, ss: 58, t: 7, zoom: true },
+      { name: 'mid',   src: c2, ss: 58, t: 7, zoom: false },
       { name: 'end',   src: c3, ss: 1, t: 9, zoom: false },
       { name: 'card',  card: true, t: 3 },
     ],
     captions: [
-      { seg: 'intro', at: 0,   dur: 3,   style: 'thumbHook', pos: 'bottom', text: '오늘도\n인사드립니다' },
-      { seg: 'intro', at: 3.5, dur: 3,   style: 'topPill', text: '대전 현대·제네시스' },
-      { seg: 'mid',   at: 0.3, dur: 4,   style: 'centerPop', text: '오늘도 달립니다 🚗💨' },
-      { seg: 'mid',   at: 5,   dur: 2,   style: 'lowerThird', text: '🔥 출고 상담 환영' },
-      { seg: 'end',   at: 0.3, dur: 4,   style: 'bottomBig', text: '견적·상담 환영 🙌', accent: '환영' },
-      { seg: 'end',   at: 5,   dur: 4,   style: 'topPill', text: '📞 010-8033-3522' },
+      { seg: 'intro', at: 0.5, dur: 4, style: 'sub', text: '대전·세종·충청 · 전국 출고 가능' },
+      { seg: 'mid',   at: 0.3, dur: 4, style: 'sub', text: '오늘도 안전운행 하겠습니다 🚗' },
+      { seg: 'end',   at: 0.3, dur: 5, style: 'sub', text: '견적·시승·출고 상담 환영합니다 🙌' },
     ],
   },
 };
@@ -118,13 +119,13 @@ function frameHtml(dateText, titleHtml) {
    .ttl{font-size:92px;font-weight:900;color:#fff;letter-spacing:-3px;line-height:1.12}
    .ttl .hl{color:#FFD60A}
    .bot{position:absolute;left:0;bottom:0;width:${W}px;height:${BOTBAND}px;background:#000;display:flex;align-items:center;justify-content:center}
-   .card{display:flex;align-items:center;gap:26px;background:#fff;border-radius:22px;padding:30px 46px;box-shadow:0 10px 40px rgba(0,0,0,.4)}
-   .logo{width:76px;height:76px;border-radius:50%;background:#0b1f5e;color:#fff;font-size:44px;font-weight:900;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif}
-   .who{font-size:40px;font-weight:800;color:#0b1f5e;letter-spacing:-1px}
-   .tel{font-size:56px;font-weight:900;color:#0b1f5e;letter-spacing:1px;margin-top:2px}
+   .card{display:flex;flex-direction:column;align-items:center;gap:6px;background:#0c1f63;border-radius:22px;padding:26px 64px;box-shadow:0 10px 40px rgba(0,0,0,.45)}
+   .logos{height:62px;margin-bottom:10px}
+   .who{font-size:40px;font-weight:800;color:#fff;letter-spacing:-1px}
+   .tel{font-size:60px;font-weight:900;color:#fff;letter-spacing:2px}
   </style></head><body><div class="stage">
    <div class="top"><div class="date">${dateText}</div><div class="ttl">${titleHtml}</div></div>
-   <div class="bot"><div class="card"><div class="logo">H</div><div><div class="who">현대·제네시스 대전선화점 · 김무겸 과장</div><div class="tel">010-8033-3522</div></div></div></div>
+   <div class="bot"><div class="card">${logosB64 ? `<img class="logos" src="data:image/png;base64,${logosB64}">` : ''}<div class="who">대전선화점 김무겸 과장</div><div class="tel">010-8033-3522</div></div></div>
   </div></body></html>`;
 }
 const WD = ['일', '월', '화', '수', '목', '금', '토'];

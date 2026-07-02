@@ -130,12 +130,14 @@ const opsHtml = `
     </div>
   </div>
 
-  <div class="sec-title">🔗 연동</div>
+  <div class="sec-title">🔗 채널 바로가기 <span class="subtag">클릭하면 각 채널로 이동</span></div>
   <div class="panel">
-    <div class="kv"><span class="muted">유튜브</span><b>@hyundai_moomoo</b></div>
-    <div class="kv"><span class="muted">인스타그램</span><b>@hyundai_moomoo (홈페이지 연동)</b></div>
-    <div class="kv"><span class="muted">카카오 상담</span><b>오픈채팅 연결 (홈페이지 버튼)</b></div>
-    <div class="kv"><span class="muted">홈페이지</span><b>leejiho-pslab.github.io/moomoo</b></div>
+    <div class="chlinks">
+      <a class="chbtn yt" href="https://www.youtube.com/@hyundai_moomoo" target="_blank">▶️ 유튜브<span>@hyundai_moomoo</span></a>
+      <a class="chbtn ig" href="https://www.instagram.com/hyundai_moomoo" target="_blank">📸 인스타그램<span>@hyundai_moomoo</span></a>
+      <a class="chbtn ka" href="https://open.kakao.com/o/scFQTHBi" target="_blank">💬 카카오 상담<span>오픈채팅 1:1</span></a>
+      <a class="chbtn hp" href="https://leejiho-pslab.github.io/moomoo" target="_blank">🏠 홈페이지<span>moomoo</span></a>
+    </div>
   </div>`;
 
 const switchJs = `
@@ -172,6 +174,15 @@ const html = `<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><meta n
  .vid img{width:100%;border-radius:12px;border:1px solid #1e2740;display:block}
  .opthumb{display:flex;gap:14px}.opthumb .col{flex:1;text-align:center}.opthumb img{height:300px;border-radius:10px;border:1px solid #1e2740}
  .pill{display:inline-block;background:#1c2747;color:#cdd9f5;border-radius:8px;padding:3px 9px;margin:3px 4px 0 0;font-size:12px}
+ .chlinks{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+ .chbtn{display:flex;flex-direction:column;gap:4px;text-decoration:none;color:#fff;font-weight:800;font-size:16px;padding:16px 18px;border-radius:14px;background:#141b33;border:1px solid #243056}
+ .chbtn span{font-weight:600;font-size:12px;color:#aebfe6}
+ .chbtn.yt{background:linear-gradient(135deg,#ff1a1a22,#141b33);border-color:#5a2330}
+ .chbtn.ig{background:linear-gradient(135deg,#5a2a55,#141b33);border-color:#5a2a55}
+ .chbtn.ka{background:linear-gradient(135deg,#3a3416,#141b33);border-color:#5a5223}
+ .chbtn.hp{background:linear-gradient(135deg,#14246b,#141b33);border-color:#243a86}
+ .chbtn:hover{border-color:#6ea8ff}
+ @media(max-width:900px){.chlinks{grid-template-columns:repeat(2,1fr)}}
 ${BLOG_CSS}
  @media(max-width:900px){.opcards{grid-template-columns:repeat(2,1fr)}.optwo{grid-template-columns:1fr}}
 </style></head><body>
