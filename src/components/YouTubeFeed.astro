@@ -22,12 +22,25 @@ const videos = (feed.youtube ?? []).slice(0, 6);
     {videos.length > 0 ? (
       <div class="yt-grid">
         {videos.map((v, i) => (
-          <a class="yt-card" href={v.url} target="_blank" rel="noopener" data-reveal data-reveal-delay={String((i % 3) + 1)}>
-            <div class="yt-card__thumb" style={v.thumbnail ? `background-image:url('${v.thumbnail}')` : undefined}>
+          <div
+            class="yt-card"
+            data-yt-card
+            data-video-id={v.id}
+            data-reveal
+            data-reveal-delay={String((i % 3) + 1)}
+          >
+            <button
+              class="yt-card__thumb"
+              type="button"
+              aria-label={`${v.title} 재생`}
+              style={v.thumbnail ? `background-image:url('${v.thumbnail}')` : undefined}
+            >
               <span class="yt-card__play" aria-hidden="true">▶</span>
-            </div>
-            <h3 class="yt-card__title">{v.title}</h3>
-          </a>
+            </button>
+            <h3 class="yt-card__title">
+              <a href={v.url} target="_blank" rel="noopener">{v.title}</a>
+            </h3>
+          </div>
         ))}
       </div>
     ) : (
@@ -50,30 +63,42 @@ const videos = (feed.youtube ?? []).slice(0, 6);
   .yt__channel { flex: none; }
 
   .yt-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr);
-    gap: clamp(16px, 2.4vw, 28px);
+    display: grid; grid-template-columns: repeat(6, 1fr);
+    gap: clamp(12px, 1.6vw, 20px);
   }
-  .yt-card { display: flex; flex-direction: column; gap: 14px; }
+  .yt-card { display: flex; flex-direction: column; gap: 12px; }
   .yt-card__thumb {
-    position: relative; aspect-ratio: 16 / 9; border-radius: 14px; overflow: hidden;
+    position: relative; width: 100%; aspect-ratio: 9 / 16; border-radius: 16px; overflow: hidden;
     background: #14161c center / cover no-repeat;
     background-image: linear-gradient(135deg, #14161c, #2a3340);
     display: grid; place-items: center;
     transition: transform 0.4s var(--ease);
+    border: none; padding: 0; cursor: pointer;
   }
   .yt-card:hover .yt-card__thumb { transform: translateY(-4px); }
-  .yt-card__thumb::after { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.12); }
+  .yt-card__thumb::after { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.18); }
   .yt-card__play {
     position: relative; z-index: 1;
-    width: 56px; height: 56px; border-radius: 50%;
-    display: grid; place-items: center; color: #fff;
+    width: 52px; height: 52px; border-radius: 50%;
+    display: grid; place-items: center; color: #fff; font-size: 0.9rem;
     background: rgba(0, 170, 210, 0.92);
     box-shadow: 0 10px 30px -8px rgba(0, 170, 210, 0.6);
   }
   .yt-card__title {
-    font-size: 1rem; font-weight: 600; color: rgba(255,255,255,0.9);
-    line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2;
+    font-size: 0.86rem; font-weight: 600; color: rgba(255,255,255,0.9);
+    line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2;
     -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .yt-card__title a { color: inherit; text-decoration: none; }
+  .yt-card__title a:hover { color: var(--accent); }
+
+  /* 클릭 시 썸네일 → 실제 재생 iframe 으로 교체 */
+  .yt-card__frame {
+    position: relative; width: 100%; aspect-ratio: 9 / 16; border-radius: 16px;
+    overflow: hidden; background: #000;
+  }
+  .yt-card__frame iframe {
+    position: absolute; inset: 0; width: 100%; height: 100%; border: 0;
   }
 
   .feed-empty {
@@ -89,9 +114,37 @@ const videos = (feed.youtube ?? []).slice(0, 6);
   .feed-empty strong { display: block; font-size: 1.1rem; }
   .feed-empty em { display: block; font-style: normal; color: var(--muted-dark); margin-top: 4px; font-size: 0.92rem; }
 
+  @media (max-width: 1080px) {
+    .yt-grid { grid-template-columns: repeat(4, 1fr); }
+  }
   @media (max-width: 880px) {
     .section__head--row { flex-direction: column; align-items: flex-start; gap: 16px; }
-    .yt-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-    .yt-card__title { font-size: 0.86rem; }
+    .yt-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .yt-card__title { font-size: 0.78rem; }
+  }
+  @media (max-width: 560px) {
+    .yt-grid { grid-template-columns: repeat(2, 1fr); }
   }
 </style>
+
+<script>
+  function playShort(card: HTMLElement) {
+    const videoId = card.dataset.videoId;
+    const thumb = card.querySelector<HTMLButtonElement>('.yt-card__thumb');
+    if (!videoId || !thumb) return;
+    const frame = document.createElement('div');
+    frame.className = 'yt-card__frame';
+    frame.innerHTML = `<iframe
+      src="https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&playsinline=1&rel=0"
+      title="YouTube Shorts 재생"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+    ></iframe>`;
+    thumb.replaceWith(frame);
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-yt-card]').forEach((card) => {
+    const thumb = card.querySelector('.yt-card__thumb');
+    thumb?.addEventListener('click', () => playShort(card), { once: true });
+  });
+</script>
