@@ -101,14 +101,14 @@ async function download(name, url) {
 async function main() {
   await mkdir(OUT_DIR, { recursive: true });
 
-  let sources = { hero: '', profile: '', models: {}, aboutBanners: {} };
+  let sources = { hero: '', profile: '', models: {} };
   try {
     sources = JSON.parse(await readFile(SOURCES, 'utf8'));
   } catch {
     console.warn('[img] image-sources.json 없음 — 빈 매니페스트 생성');
   }
 
-  let prev = { hero: null, profile: null, models: {}, aboutBanners: {} };
+  let prev = { hero: null, profile: null, models: {} };
   try {
     prev = JSON.parse(await readFile(MANIFEST, 'utf8'));
   } catch {}
@@ -124,14 +124,9 @@ async function main() {
     models[id] = (await download(`model-${id}`, url)) ?? keep(prev.models?.[id]);
   }
 
-  const aboutBanners = {};
-  for (const [id, url] of Object.entries(sources.aboutBanners ?? {})) {
-    aboutBanners[id] = (await download(`about-banner-${id}`, url)) ?? keep(prev.aboutBanners?.[id]);
-  }
-
-  const manifest = { hero, profile, models, aboutBanners };
+  const manifest = { hero, profile, models };
   await writeFile(MANIFEST, JSON.stringify(manifest, null, 2) + '\n', 'utf8');
-  const count = [hero, profile, ...Object.values(models), ...Object.values(aboutBanners)].filter(Boolean).length;
+  const count = [hero, profile, ...Object.values(models)].filter(Boolean).length;
   console.log(`[img] 매니페스트 저장 (${count}장 적용) → ${MANIFEST}`);
 }
 

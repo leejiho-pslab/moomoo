@@ -9,9 +9,9 @@ const profileSrc = images.profile ?? localImage('profile');
 const hasProfilePhoto = Boolean(img(profileSrc));
 const profilePhoto = img(profileSrc) ?? `${import.meta.env.BASE_URL}images/dealer-profile.svg`;
 const banners = {
-  career: img(images.aboutBanners?.career),
-  services: img(images.aboutBanners?.services),
-  process: img(images.aboutBanners?.process),
+  career: img(localImage('about-career')),
+  services: img(localImage('about-services')),
+  process: img(localImage('about-process')),
 };
 ---
 
@@ -186,8 +186,8 @@ const banners = {
   .about__block { border-top: 1px solid var(--line-dark); padding-top: clamp(40px, 6vw, 64px); }
   .about__banner {
     position: relative;
-    width: 100%; aspect-ratio: 21 / 6; border-radius: var(--radius);
-    background-size: cover; background-position: center;
+    width: 100%; aspect-ratio: 21 / 9; border-radius: var(--radius);
+    background-size: cover; background-position: center 60%;
     background-color: #10131c;
     overflow: hidden;
     border: 1px solid var(--line-dark);

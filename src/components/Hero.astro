@@ -82,6 +82,8 @@ const subtitleLines = subtitle.split('\n');
     background-size: cover; background-position: center;
     background-color: var(--ink);
   }
+  /* 실제 차량 사진일 때는 인물/피사체가 명함 카드와 겹치지 않도록 왼쪽(차량 쪽)으로 초점 이동 */
+  .hero__bg[data-photo] { background-position: 22% center; }
   .hero__bg::before {
     content: '';
     position: absolute; inset: 0;
@@ -199,5 +201,7 @@ const subtitleLines = subtitle.split('\n');
     .hero__cta .btn { flex: 1 1 auto; }
     .hero__dealer { justify-self: start; width: min(72%, 300px); }
     .hero__car { width: 120%; opacity: 0.32; bottom: 2%; }
+    /* 좁은 화면에서는 사진의 가시 폭이 줄어드니 차량이 잘리지 않도록 초점을 조금 더 안쪽으로 */
+    .hero__bg[data-photo] { background-position: 38% center; }
   }
 </style>
