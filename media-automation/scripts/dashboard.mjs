@@ -136,7 +136,7 @@ const opsHtml = `
       <a class="chbtn yt" href="https://www.youtube.com/@hyundai_moomoo" target="_blank">▶️ 유튜브<span>@hyundai_moomoo</span></a>
       <a class="chbtn ig" href="https://www.instagram.com/hyundai_moomoo" target="_blank">📸 인스타그램<span>@hyundai_moomoo</span></a>
       <a class="chbtn ka" href="https://open.kakao.com/o/scFQTHBi" target="_blank">💬 카카오 상담<span>오픈채팅 1:1</span></a>
-      <a class="chbtn hp" href="https://leejiho-pslab.github.io/moomoo" target="_blank">🏠 홈페이지<span>moomoo</span></a>
+      <a class="chbtn hp" href="https://hyundaimoomoo.co.kr" target="_blank">🏠 홈페이지<span>hyundaimoomoo.co.kr</span></a>
     </div>
   </div>`;
 
