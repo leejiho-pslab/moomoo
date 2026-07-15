@@ -52,6 +52,8 @@ const igStrip = strip(join(out, 'ig.mp4'), [1, igDur ? igDur / 2 : 13, igDur ? i
 const thumbIG = dataUrl(join(ROOT, 'assets', 'clips', 'final', '0630_인스타_썸네일.png')) || dataUrl(join(out, '2026-06-30_instagram_thumb_bg.png'));
 const thumbYT = dataUrl(join(ROOT, 'assets', 'clips', 'final', '0630_유튜브숏츠_썸네일.png')) || dataUrl(join(out, '2026-06-30_youtube_thumb_bg.png'));
 const profile = dataUrl(join(ROOT, 'assets', 'brand', 'face.jpg')) || dataUrl(join(ROOT, 'assets', 'brand', 'profile.jpg'));
+const suspInfographic = dataUrl(join(ROOT, 'output', 'content', 'suspension-macpherson.png'));
+const suspThumb = dataUrl(join(ROOT, 'output', 'content', 'suspension-overview-thumb.png'));
 
 const autoOn = auto.inputFolderId && !String(auto.inputFolderId).startsWith('PUT_') && (auto.delivery === 'drive');
 const modules = [
@@ -108,6 +110,12 @@ const opsHtml = `
   <div class="panel"><div class="opthumb">
     <div class="col"><div class="muted" style="margin-bottom:8px">인스타 (하단 배치)</div>${thumbIG ? `<img src="${thumbIG}">` : ''}</div>
     <div class="col"><div class="muted" style="margin-bottom:8px">유튜브 (중앙 배치)</div>${thumbYT ? `<img src="${thumbYT}">` : ''}</div>
+  </div></div>
+
+  <div class="sec-title">🎨 신규 콘텐츠 소재 <span class="subtag">정보성 콘텐츠 예시 · 인스타 카드형 + 유튜브 썸네일</span></div>
+  <div class="panel"><div class="opthumb">
+    <div class="col"><div class="muted" style="margin-bottom:8px">인스타 카드형 인포그래픽 — 맥퍼슨 스트럿(전륜)</div>${suspInfographic ? `<img src="${suspInfographic}" style="border-radius:12px">` : '<div class="muted">output/content/suspension-macpherson.png 없음 — node scripts/gen-suspension-content.mjs 실행</div>'}</div>
+    <div class="col"><div class="muted" style="margin-bottom:8px">유튜브 썸네일 — 서스펜션 6종 총정리</div>${suspThumb ? `<img src="${suspThumb}" style="border-radius:12px">` : '<div class="muted">output/content/suspension-overview-thumb.png 없음</div>'}</div>
   </div></div>
 
   <div class="sec-title">📦 자동화 현황</div>
