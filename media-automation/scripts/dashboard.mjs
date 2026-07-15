@@ -114,8 +114,16 @@ const opsHtml = `
 
   <div class="sec-title">🎨 신규 콘텐츠 소재 <span class="subtag">정보성 콘텐츠 예시 · 인스타 카드형 + 유튜브 썸네일</span></div>
   <div class="panel"><div class="opthumb">
-    <div class="col"><div class="muted" style="margin-bottom:8px">인스타 카드형 인포그래픽 — 맥퍼슨 스트럿(전륜)</div>${suspInfographic ? `<img src="${suspInfographic}" style="border-radius:12px">` : '<div class="muted">output/content/suspension-macpherson.png 없음 — node scripts/gen-suspension-content.mjs 실행</div>'}</div>
-    <div class="col"><div class="muted" style="margin-bottom:8px">유튜브 썸네일 — 서스펜션 6종 총정리</div>${suspThumb ? `<img src="${suspThumb}" style="border-radius:12px">` : '<div class="muted">output/content/suspension-overview-thumb.png 없음</div>'}</div>
+    <div class="col">
+      <div class="muted" style="margin-bottom:8px">인스타 카드형 인포그래픽 — 맥퍼슨 스트럿(전륜)</div>
+      ${suspInfographic ? `<img src="${suspInfographic}" style="border-radius:12px">
+      <button class="btn primary" style="margin-top:10px" onclick="dlImg('${suspInfographic}','macpherson-strut-infographic.png')">⬇️ 이미지 다운로드</button>` : '<div class="muted">output/content/suspension-macpherson.png 없음 — node scripts/gen-suspension-content.mjs 실행</div>'}
+    </div>
+    <div class="col">
+      <div class="muted" style="margin-bottom:8px">유튜브 썸네일 — 서스펜션 6종 총정리</div>
+      ${suspThumb ? `<img src="${suspThumb}" style="border-radius:12px">
+      <button class="btn primary" style="margin-top:10px" onclick="dlImg('${suspThumb}','suspension-youtube-thumbnail.png')">⬇️ 이미지 다운로드</button>` : '<div class="muted">output/content/suspension-overview-thumb.png 없음</div>'}
+    </div>
   </div></div>
 
   <div class="sec-title">📦 자동화 현황</div>
@@ -155,6 +163,17 @@ function showSheet(s){
   window.scrollTo(0,0);
 }
 document.querySelectorAll('.snav').forEach(b=>b.onclick=()=>showSheet(b.dataset.s));
+
+// data URL → Blob 로 변환해 다운로드(파일명이 data: URL에서 무시되는 브라우저 대응)
+async function dlImg(dataUrl, filename){
+  const res = await fetch(dataUrl);
+  const blob = await res.blob();
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
 `;
 
 const html = `<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
