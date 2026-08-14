@@ -23,7 +23,8 @@ function dataUrl(p) {
   return `data:${mime};base64,${readFileSync(p).toString('base64')}`;
 }
 
-const profilePhoto = dataUrl(join(ROOT, '..', 'public', 'images', 'profile.jpg'));
+// 정사각 얼굴 크롭본을 쓴다(예전엔 명함 합성본을 background-position 으로 확대해 잘라 썼음).
+const profilePhoto = dataUrl(join(ROOT, '..', 'public', 'images', 'profile-face.jpg'));
 const logos = dataUrl(join(ROOT, 'assets', 'brand', 'logos.png'));
 
 const DEALER = {
@@ -130,7 +131,7 @@ const infographicHtml = `<!doctype html><html><head><meta charset="utf-8">
   .head h1 em { font-style:normal; color:#0b3d91; }
   .head p { margin-top:10px; font-size:19px; color:#5b6478; font-weight:600; }
   .person { display:flex; align-items:center; gap:14px; background:#0c1f63; border-radius:18px; padding:10px 20px 10px 10px; box-shadow:0 10px 30px -12px rgba(11,61,145,.5); }
-  .person__photo { border-radius:14px; background-size:220% auto; background-position:50% 12%; flex:none; border:2px solid rgba(255,255,255,.5); }
+  .person__photo { border-radius:14px; background-size:cover; background-position:center; flex:none; border:2px solid rgba(255,255,255,.5); }
   .person__meta { color:#fff; }
   .person__dealership { font-size:13px; opacity:.85; font-weight:600; }
   .person__name { font-size:19px; font-weight:800; margin-top:2px; }
@@ -269,7 +270,7 @@ const thumbHtml = `<!doctype html><html><head><meta charset="utf-8">
   .topbar .t1 span { color:#7fd0ff; }
   ${''}
   .person { display:flex; align-items:center; gap:12px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.25); border-radius:14px; padding:8px 16px 8px 8px; }
-  .person__photo { width:64px; height:64px; border-radius:10px; background-image:url('${profilePhoto}'); background-size:220% auto; background-position:50% 12%; flex:none; }
+  .person__photo { width:64px; height:64px; border-radius:10px; background-image:url('${profilePhoto}'); background-size:cover; background-position:center; flex:none; }
   .person__meta { font-size:13px; }
   .person__dealership { opacity:.85; font-weight:600; }
   .person__name { font-weight:800; font-size:15px; margin-top:2px; }

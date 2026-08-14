@@ -4,9 +4,10 @@ import images from '../data/images.json';
 import { img } from '../lib/img';
 import { localImage } from '../lib/localImage';
 const { eyebrow, title, subtitle, backgroundImage } = site.hero;
-// 합성 히어로: 차량 이미지(배경) + 딜러 사진(전면 포트레이트)
+// 합성 히어로: 차량 이미지(배경) + 딜러 누끼 사진(전면 포트레이트)
 const heroCar = img(images.hero ?? localImage('hero') ?? backgroundImage ?? images.models?.grandeur);
-const dealerSrc = images.profile ?? localImage('profile');
+// 배경(차량 사진) 위에 얹으므로 흰 배경을 지운 누끼 이미지를 우선 사용한다.
+const dealerSrc = localImage('profile-cutout') ?? images.profile ?? localImage('profile');
 const hasDealerPhoto = Boolean(img(dealerSrc));
 const dealerPhoto = img(dealerSrc) ?? `${import.meta.env.BASE_URL}images/dealer-profile.svg`;
 const titleLines = title.split('\n');
@@ -52,13 +53,14 @@ const subtitleLines = subtitle.split('\n');
     </div>
 
     <figure class="hero__dealer" data-photo={hasDealerPhoto ? 'true' : undefined} data-reveal data-reveal-delay="2">
-      <img src={dealerPhoto} alt="담당 딜러" />
-      {!hasDealerPhoto && (
-        <figcaption>
-          <strong>{site.dealer.name} <em>{site.dealer.role}</em></strong>
-          <span>{site.dealer.dealership}</span>
-        </figcaption>
-      )}
+      <img class="hero__dealer-photo" src={dealerPhoto} alt={`${site.dealer.name} ${site.dealer.role}`} />
+      <figcaption class="hero__card">
+        <strong class="hero__card-name">{site.dealer.name}<em>{site.dealer.role}</em></strong>
+        <span class="hero__card-shop">{site.dealer.dealership}</span>
+        <a class="hero__card-tel" href={`tel:${site.contact.phone.replace(/-/g, '')}`}>
+          {site.contact.phone}
+        </a>
+      </figcaption>
     </figure>
   </div>
 
@@ -129,7 +131,8 @@ const subtitleLines = subtitle.split('\n');
     position: relative; z-index: 2;
     padding-block: 124px 100px;
     display: grid;
-    grid-template-columns: 1.08fr 0.92fr;
+    /* 인물은 필요한 폭만 쓰고, 남는 폭은 전부 카피에 준다(제목 줄바꿈 방지) */
+    grid-template-columns: minmax(0, 1fr) auto;
     gap: clamp(32px, 5vw, 72px);
     align-items: center;
     width: 100%;
@@ -138,40 +141,66 @@ const subtitleLines = subtitle.split('\n');
   .hero__sub { margin-top: 26px; color: rgba(255, 255, 255, 0.72); max-width: 52ch; }
   .hero__cta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 40px; }
 
+  /* 누끼 인물 — 카드 박스 없이 배경 위에 그대로 세운다(배경 사진과 충돌 방지) */
   .hero__dealer {
     margin: 0;
-    justify-self: end;
-    width: min(100%, 380px);
-    border-radius: 22px;
-    overflow: hidden;
     position: relative;
-    background: rgba(12, 16, 24, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    box-shadow: 0 40px 80px -30px rgba(0, 170, 210, 0.45);
-    backdrop-filter: blur(4px);
+    justify-self: end;
+    align-self: end;
+    width: auto;
   }
-  .hero__dealer img {
-    width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block;
+  .hero__dealer-photo {
+    display: block;
+    /* 폭이 아니라 높이를 기준으로 잡아야 히어로 밖으로 넘치지 않는다 */
+    height: min(70vh, 660px);
+    width: auto;
+    max-width: 100%;
+    /* 어두운 배경에서 남색 정장이 묻히지 않도록 분리감을 준다 */
+    filter:
+      drop-shadow(0 26px 46px rgba(0, 0, 0, 0.62))
+      drop-shadow(0 0 70px rgba(0, 170, 210, 0.18));
+    /* 허벅지에서 잘린 원본 하단을 부드럽게 페이드 — 잘린 느낌 제거 */
+    -webkit-mask-image: linear-gradient(180deg, #000 76%, rgba(0, 0, 0, 0) 99%);
+    mask-image: linear-gradient(180deg, #000 76%, rgba(0, 0, 0, 0) 99%);
   }
-  /* 실제 업로드 사진(명함 등)은 잘리지 않게 원본 비율 그대로 전체 표시 */
-  .hero__dealer[data-photo] {
-    background: #fff;
+  /* 누끼 뒤 은은한 광원 — 인물과 배경 차량을 시각적으로 분리 */
+  .hero__dealer::before {
+    content: '';
+    position: absolute;
+    left: 50%; bottom: 8%;
+    width: 78%; aspect-ratio: 1;
+    transform: translateX(-50%);
+    background: radial-gradient(circle, rgba(0, 170, 210, 0.20), transparent 68%);
+    filter: blur(26px);
+    z-index: -1;
+    pointer-events: none;
   }
-  .hero__dealer[data-photo] img {
-    aspect-ratio: auto; object-fit: contain; height: auto;
+
+  /* 연락처 배지 (기존엔 사진에 박혀 있던 명함 정보를 HTML 로 분리) */
+  .hero__card {
+    position: absolute;
+    left: -16px;
+    bottom: 30px;
+    padding: 14px 22px 15px;
+    border-radius: 16px;
+    background: rgba(8, 14, 30, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    box-shadow: 0 22px 50px -18px rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(14px) saturate(1.25);
   }
-  .hero__dealer figcaption {
-    position: absolute; inset: auto 0 0 0;
-    padding: 40px 20px 18px;
-    background: linear-gradient(180deg, transparent, rgba(5, 7, 11, 0.88));
-  }
-  .hero__dealer strong { display: block; font-size: 1.2rem; }
-  .hero__dealer strong em {
-    font-style: normal; font-weight: 600; font-size: 0.72rem;
-    letter-spacing: 0.08em; color: var(--accent); margin-left: 8px;
+  .hero__card-name { display: block; font-size: 1.16rem; font-weight: 800; letter-spacing: -0.02em; }
+  .hero__card-name em {
+    font-style: normal; font-weight: 600; font-size: 0.68rem;
+    letter-spacing: 0.1em; color: var(--accent); margin-left: 9px;
     vertical-align: middle;
   }
-  .hero__dealer span { display: block; margin-top: 4px; font-size: 0.85rem; color: rgba(255, 255, 255, 0.72); }
+  .hero__card-shop { display: block; margin-top: 3px; font-size: 0.8rem; color: rgba(255, 255, 255, 0.66); }
+  .hero__card-tel {
+    display: inline-block; margin-top: 8px;
+    font-size: 1.12rem; font-weight: 800; letter-spacing: 0.5px;
+    color: #fff; text-decoration: none;
+  }
+  .hero__card-tel:hover { color: var(--accent); }
 
   .hero__scroll {
     position: absolute; left: 50%; bottom: 30px; transform: translateX(-50%);
@@ -199,9 +228,21 @@ const subtitleLines = subtitle.split('\n');
       gap: 40px;
     }
     .hero__cta .btn { flex: 1 1 auto; }
-    .hero__dealer { justify-self: start; width: min(72%, 300px); }
     .hero__car { width: 120%; opacity: 0.32; bottom: 2%; }
     /* 좁은 화면에서는 사진의 가시 폭이 줄어드니 차량이 잘리지 않도록 초점을 조금 더 안쪽으로 */
     .hero__bg[data-photo] { background-position: 38% center; }
+
+    /* 세로 배치: 인물을 가운데로 줄이고, 배지는 겹치지 않게 인물 아래로 흘려보낸다
+       (절대배치로 두면 하단 고정 CTA 바에 가려짐) */
+    .hero__dealer { justify-self: center; width: auto; }
+    .hero__dealer-photo { height: min(44vh, 360px); }
+    .hero__card {
+      position: static;
+      transform: none;
+      width: max-content;
+      margin: -14px auto 0;
+      padding: 12px 22px 13px;
+      text-align: center;
+    }
   }
 </style>

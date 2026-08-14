@@ -5,8 +5,11 @@ import { img } from '../lib/img';
 import { localImage } from '../lib/localImage';
 const { title, body, stats, credentials, career, awards, services, process } = site.about;
 const titleLines = title.split('\n');
-const profileSrc = images.profile ?? localImage('profile');
+// 누끼 이미지를 우선 사용하고, 어두운 섹션에 맞춰 스튜디오 배경을 CSS 로 깔아준다.
+const cutoutSrc = localImage('profile-cutout');
+const profileSrc = cutoutSrc ?? images.profile ?? localImage('profile');
 const hasProfilePhoto = Boolean(img(profileSrc));
+const isCutout = Boolean(cutoutSrc);
 const profilePhoto = img(profileSrc) ?? `${import.meta.env.BASE_URL}images/dealer-profile.svg`;
 const banners = {
   career: img(localImage('about-career')),
@@ -19,9 +22,11 @@ const banners = {
   <div class="container about">
     <div class="about__intro">
       <div class="about__aside" data-reveal>
-        <figure class="about__photo">
-          <img src={profilePhoto} alt="딜러 프로필" loading="lazy" />
-          {!hasProfilePhoto && <figcaption>{site.dealer.name} · {site.dealer.role}</figcaption>}
+        <figure class="about__photo" data-cutout={isCutout ? 'true' : undefined}>
+          <img src={profilePhoto} alt={`${site.dealer.name} ${site.dealer.role}`} loading="lazy" />
+          {(!hasProfilePhoto || isCutout) && (
+            <figcaption>{site.dealer.name} · {site.dealer.role}</figcaption>
+          )}
         </figure>
         <ul class="creds">
           {credentials.map((c) => (
@@ -142,6 +147,21 @@ const banners = {
     border-radius: var(--radius);
     border: 1px solid var(--line-dark);
     box-shadow: 0 30px 60px -30px rgba(0, 170, 210, 0.5);
+  }
+  /* 누끼 사진일 때 — 어두운 섹션에 맞춘 스튜디오 배경을 카드에 직접 깐다 */
+  .about__photo[data-cutout] {
+    border-radius: var(--radius);
+    border: 1px solid var(--line-dark);
+    overflow: hidden;
+    background:
+      radial-gradient(120% 78% at 50% 6%, rgba(0, 170, 210, 0.20), transparent 62%),
+      linear-gradient(180deg, #16213a 0%, #0d1425 100%);
+    box-shadow: 0 30px 60px -30px rgba(0, 170, 210, 0.5);
+  }
+  .about__photo[data-cutout] img {
+    display: block;
+    border: 0; border-radius: 0; box-shadow: none;
+    margin-bottom: -2px;
   }
   .about__photo figcaption {
     position: absolute; left: 16px; bottom: 16px;
